@@ -1,6 +1,8 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import axios from "axios";
+import { Link, useNavigate } from "react-router-dom";
 const SignUp = () => {
+const navigate=useNavigate();
     const [formData, setFormData] = useState({
         month: "",
         day: "",
@@ -17,10 +19,55 @@ const SignUp = () => {
         setFormData({ ...formData, [name]: value });
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log(formData);
+
+        // Combine the birthday fields into one object
+        const birthday = {
+            month: formData.month,
+            day: formData.day,
+            year: formData.year,
+        };
+
+        try {
+            const response = await axios.post('http://localhost:5000/signup', {
+                username: formData.username,
+                password: formData.password,
+                birthday,
+                gender: formData.gender,
+                contact: formData.contact,
+                qualification: formData.qualification,
+            });
+
+            // Handle success
+            console.log('User registered:', response.data);
+            // alert('Signup successful!');
+            navigate("/personalizeform")
+
+            if (response.status === 201) {
+                const id = response.data.user;
+                localStorage.setItem("userId", id);
+            }
+
+        } catch (error) {
+            // Handle errors
+            console.error('Error during signup:', error.response?.data || error.message);
+            alert('Signup failed. Please try again.');
+        }
     };
+
+
+    const months = [
+        "January", "February", "March", "April", "May", "June",
+        "July", "August", "September", "October", "November", "December"
+    ];
+
+    // Generate days dynamically
+    const days = Array.from({ length: 31 }, (_, i) => i + 1);
+
+    // Generate years dynamically (e.g., 100 years back)
+    const currentYear = new Date().getFullYear();
+    const years = Array.from({ length: 100 }, (_, i) => currentYear - i);
 
     return (
         <div
@@ -32,13 +79,12 @@ const SignUp = () => {
                 backgroundPosition: "center",
             }}
         >
-             
-           
-                <Link to="/signin" className="text-black text-sm absolute right-10 z-10 top-8 bg-white px-5 py-2 rounded-[10px]">
-                    LogIn
-                </Link>
-            
-
+            <Link
+                to="/signin"
+                className="text-black text-sm absolute right-10 z-10 top-8 bg-white px-5 py-2 rounded-[10px]"
+            >
+                LogIn
+            </Link>
 
             {/* Overlay to reduce opacity */}
             <div className="absolute inset-0 bg-black opacity-50"></div>
@@ -46,7 +92,7 @@ const SignUp = () => {
             {/* Signup Form */}
             <form
                 onSubmit={handleSubmit}
-                className="relative bg-gray-800 bg-opacity-90 p-8 rounded-lg shadow-lg w-[480px]" // 1.2x original width
+                className="relative bg-gray-800 bg-opacity-90 p-8 rounded-lg shadow-lg w-[480px]"
             >
                 <h1 className="text-white text-2xl font-bold text-center mb-6">
                     SIGN UP AND START HAVING FUN!
@@ -63,18 +109,11 @@ const SignUp = () => {
                             className="flex-1 p-3 rounded-md border border-gray-600 bg-gray-700 text-white"
                         >
                             <option value="">Month</option>
-                            <option value="January">January</option>
-                            <option value="February">February</option>
-                            <option value="March">March</option>
-                            <option value="April">April</option>
-                            <option value="May">May</option>
-                            <option value="June">June</option>
-                            <option value="July">July</option>
-                            <option value="August">August</option>
-                            <option value="September">September</option>
-                            <option value="October">October</option>
-                            <option value="November">November</option>
-                            <option value="December">December</option>
+                            {months.map((month, index) => (
+                                <option key={index} value={month}>
+                                    {month}
+                                </option>
+                            ))}
                         </select>
                         <select
                             name="day"
@@ -83,9 +122,9 @@ const SignUp = () => {
                             className="flex-1 p-3 rounded-md border border-gray-600 bg-gray-700 text-white"
                         >
                             <option value="">Day</option>
-                            {Array.from({ length: 31 }, (_, i) => (
-                                <option key={i + 1} value={i + 1}>
-                                    {i + 1}
+                            {days.map((day) => (
+                                <option key={day} value={day}>
+                                    {day}
                                 </option>
                             ))}
                         </select>
@@ -96,15 +135,16 @@ const SignUp = () => {
                             className="flex-1 p-3 rounded-md border border-gray-600 bg-gray-700 text-white"
                         >
                             <option value="">Year</option>
-                            {Array.from({ length: 100 }, (_, i) => (
-                                <option key={2023 - i} value={2023 - i}>
-                                    {2023 - i}
+                            {years.map((year) => (
+                                <option key={year} value={year}>
+                                    {year}
                                 </option>
                             ))}
                         </select>
                     </div>
                 </div>
 
+                {/* Other fields */}
                 {/* Username */}
                 <div className="mb-4">
                     <label className="block text-white mb-1">Username</label>
@@ -113,7 +153,7 @@ const SignUp = () => {
                         name="username"
                         value={formData.username}
                         onChange={handleChange}
-                        placeholder="Don't use your real name"
+                        placeholder="Username"
                         className="w-full p-3 rounded-md border border-gray-600 bg-gray-700 text-white"
                     />
                 </div>
@@ -170,8 +210,8 @@ const SignUp = () => {
                             type="button"
                             onClick={() => setFormData({ ...formData, gender: "Female" })}
                             className={`flex-1 p-3 mx-1 rounded-md border ${formData.gender === "Female"
-                                    ? "bg-blue-600 text-white"
-                                    : "bg-gray-700 text-gray-300"
+                                ? "bg-blue-600 text-white"
+                                : "bg-gray-700 text-gray-300"
                                 }`}
                         >
                             Female
@@ -180,27 +220,14 @@ const SignUp = () => {
                             type="button"
                             onClick={() => setFormData({ ...formData, gender: "Male" })}
                             className={`flex-1 p-3 mx-1 rounded-md border ${formData.gender === "Male"
-                                    ? "bg-blue-600 text-white"
-                                    : "bg-gray-700 text-gray-300"
+                                ? "bg-blue-600 text-white"
+                                : "bg-gray-700 text-gray-300"
                                 }`}
                         >
                             Male
                         </button>
                     </div>
                 </div>
-
-                {/* Terms */}
-                {/* <p className="text-gray-400 text-xs mb-4">
-          By clicking Sign Up, you are agreeing to the{" "}
-          <a href="#" className="text-blue-500">
-            Terms of Use
-          </a>{" "}
-          including the arbitration clause and you are acknowledging the{" "}
-          <a href="#" className="text-blue-500">
-            Privacy Policy
-          </a>
-          .
-        </p> */}
 
                 {/* Submit */}
                 <button
@@ -210,7 +237,6 @@ const SignUp = () => {
                     Sign Up
                 </button>
             </form>
-           
         </div>
     );
 };

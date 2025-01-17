@@ -7,6 +7,7 @@ import QuestionDetail from './components/QuoraComponents/QandA';
 import Signup from './components/SignUp';
 import Signin from './components/SignIn';
 import PersonalizeForm from './components/PersonalizeForm';
+import CareerPathFlowchart from './components/CareerPathFlowchart.jsx';
 function App() {
   const router = createBrowserRouter([
     {
@@ -31,6 +32,11 @@ function App() {
     {
       path: '/personalizeform',
       element: <PersonalizeForm />, 
+      errorElement: <div>Page not found!</div>,  
+    },
+    {
+      path: '/explore',
+      element: <CareerPathFlowchart />, 
       errorElement: <div>Page not found!</div>,  
     },
   ]);

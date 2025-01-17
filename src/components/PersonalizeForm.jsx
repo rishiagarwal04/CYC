@@ -1,10 +1,12 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 const PersonalizeForm = () => {
+    const navigate=useNavigate();
     const [showHobbies, setShowHobbies] = useState(false);
     const [selectedHobbies, setSelectedHobbies] = useState([]);
     const [skillset, setSkillset] = useState("");
-
     const hobbiesList = [
         { label: "Art/Design", value: "Art/Design" },
         { label: "Tech", value: "Tech" },
@@ -20,16 +22,27 @@ const PersonalizeForm = () => {
         }
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        // Log the form data
-        console.log("Hobbies:", selectedHobbies);
-        console.log("Skillset:", skillset);
 
-        // Reset the form
-        setSelectedHobbies([]);
-        setSkillset("");
-        setShowHobbies(false);
+        const formData = {
+            hobbies: selectedHobbies,
+            skillset:skillset
+        };
+
+        try {
+            const id = localStorage.getItem('userId');
+
+            const response = await axios.put(`http://localhost:5000/signup/personalize/${id}`, formData); // Replace with your backend endpoint
+            if (response.status === 200) {
+                alert("Personalization data saved successfully!");
+                navigate('/');
+                // Optionally navigate to another route or reset the form
+            }
+        } catch (error) {
+            console.error("Error submitting form data:", error.response?.data || error.message);
+            alert("Failed to save your data. Please try again.");
+        }
     };
 
     return (
@@ -39,13 +52,13 @@ const PersonalizeForm = () => {
                 backgroundImage: `url('https://images.rbxcdn.com/782b7fc18a24ee997efd9a7f02fa4bf9-bg_08072019.jpg')`,
                 backgroundBlendMode: "overlay",
             }}
-
-            // onClick={()=>{if(showHobbies){setShowHobbies(false)}}}
         >
-
-<Link to="/" className="text-black text-sm absolute right-10 z-10 top-8 bg-white px-5 py-2 rounded-[10px]">
-                    Skip
-                </Link>
+            <Link
+                to="/"
+                className="text-black text-sm absolute right-10 z-10 top-8 bg-white px-5 py-2 rounded-[10px]"
+            >
+                Skip
+            </Link>
             <div className="w-1/3 bg-gray-900 p-8 rounded-lg shadow-lg">
                 <h2 className="text-white text-2xl font-bold mb-6 text-center">
                     Let's Get to Know YOU
@@ -68,7 +81,7 @@ const PersonalizeForm = () => {
                                     : "Select your hobbies"}
                             </button>
                             {showHobbies && (
-                                <div className=" z-10 bg-gray-800 border border-gray-600 rounded-md mt-2 p-4 max-h-40 overflow-y-auto">
+                                <div className="z-10 bg-gray-800 border border-gray-600 rounded-md mt-2 p-4 max-h-40 overflow-y-auto">
                                     {hobbiesList.map((hobby) => (
                                         <div
                                             key={hobby.value}
@@ -78,12 +91,8 @@ const PersonalizeForm = () => {
                                                 type="checkbox"
                                                 id={hobby.value}
                                                 value={hobby.value}
-                                                checked={selectedHobbies.includes(
-                                                    hobby.value
-                                                )}
-                                                onChange={() =>
-                                                    toggleHobby(hobby.value)
-                                                }
+                                                checked={selectedHobbies.includes(hobby.value)}
+                                                onChange={() => toggleHobby(hobby.value)}
                                                 className="mr-2 cursor-pointer"
                                             />
                                             <label
