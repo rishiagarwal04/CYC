@@ -6,7 +6,6 @@ const cors = require("cors");
 const questionRouter=require("./routes/QandA.js")
 const shortsRouter=require("./routes/shorts.js")
 const userRouter=require("./routes/signup.js")
-const fetchRouter=require("./routes/GoogleData.js")
 
 
 const app = express();
