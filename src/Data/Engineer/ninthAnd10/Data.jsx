@@ -1,35 +1,45 @@
 import React from 'react';
-import mathData from '../Data/Engineer/ninthAnd10/Maths';
-import ScienceData from '../Data/Engineer/ninthAnd10/ScienceOlympiad';
-import TecData from '../Data/Engineer/ninthAnd10/TechAndComputingOlympiads';
-import GkAndMis from '../Data/Engineer/ninthAnd10/GkAndMis';
-import physicsOlymp from '../Data/Engineer/ninthAnd10/PhysicsOlymp';
-const Data = () => {
-    const varia=GkAndMis;
+import mathData from './Maths';
+import ScienceData from './ScienceOlympiad';
+import TecData from './TechAndComputingOlympiads';
+import GkAndMis from './GkAndMis';
+import PhysicsOlympiadData from './PhysicsOlymp';
+import ChemistryOlympiadData from './Chemistry';
+
+const Data = ({ selectedSubcategory }) => {
+    let varia; // Use `let` so we can reassign the value
+
+    if (selectedSubcategory === "Mathematics") {
+        varia = mathData;
+    } else if (selectedSubcategory === "Chemistry") {
+        varia = ChemistryOlympiadData;
+    } else if (selectedSubcategory === "Physics") {
+        varia = PhysicsOlympiadData;
+    } else if (selectedSubcategory === "Science Olympiads") {
+        varia = ScienceData;
+    } else if (selectedSubcategory === "Technology and Computing") {
+        varia = TecData;
+    } else if (selectedSubcategory === "General Knowledge and Miscellaneous") {
+        varia = GkAndMis;
+    } else {
+        varia = { title: "Olympiads", items: [] }; // Default fallback
+    }
+
     return (
         <div className="font-sans w-full flex justify-center">
-            {/* Header Section */}
-            {/* <div className="bg-purple-800 text-white py-6 text-center">
-                <h2 className="text-2xl font-bold">Let's Start: Your Steps in 9th and 10th Grade</h2>
-            </div> */}
+            <div className="bg-purple-100 p-8 rounded-lg w-full -m-5 pl-[5%]">
+                {/* Header Section */}
+                <div className="bg-purple-800 text-white py-6 text-center w-full rounded-lg">
+                    <h2 className="text-3xl font-bold">{varia.title}</h2>
+                </div>
 
-            {/* Content Section */}
-            <div className="bg-purple-100 p-8 rounded-lg w-full m-5 mt-8 pl-[5%]">
-                {/* <h3 className="text-purple-800 text-xl font-semibold mb-6">What Olympiads you can give?</h3>
-                 */}
-
-<div className="bg-purple-800 text-white py-6 text-center w-full rounded-lg">
-                <h2 className="text-3xl font-bold">{varia.title}</h2>
-            </div>
-
+                {/* Content Section */}
                 {varia.items.map((item, index) => (
                     <div key={index} className="mb-8">
-                        {/* Category Header */}
                         <div className="bg-purple-800 text-white font-bold py-2 px-4 rounded-md inline-block mb-4 mt-9">
                             {item.name}
                         </div>
 
-                        {/* Overview */}
                         <p className="text-gray-600 mt-4">{item.overview}</p>
 
                         {/* Eligibility */}
@@ -61,21 +71,7 @@ const Data = () => {
                                 ))}
                             </ul>
                         </div>
-                        {/* Awards */}
-                        {/* {
-                            item.awards?
-                            <div className="mt-4">
-                            <strong className="block text-lg text-gray-800">Awards:</strong>
-                            <ul className="space-y-2 pl-5 text-gray-600">
-                                {item.awards.map((note, idx) => (
-                                    <li key={idx}>{note}</li>
-                                ))}
-                            </ul>
-                        </div>
-                        :""
 
-                            } */}
-                            
                         {/* Why Participate */}
                         <div className="mt-4">
                             <strong className="block text-lg text-gray-800">Why Participate:</strong>

@@ -71,7 +71,7 @@ router.put("/personalize/:id", async (req, res) => {
 
         res.status(200).json({
             message: "Personalization data updated successfully",
-            user: updatedUser,
+            hobbies: hobbies,
         });
     } catch (error) {
         console.error("Error updating personalization data:", error);

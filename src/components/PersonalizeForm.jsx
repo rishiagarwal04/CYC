@@ -8,9 +8,9 @@ const PersonalizeForm = () => {
     const [selectedHobbies, setSelectedHobbies] = useState([]);
     const [skillset, setSkillset] = useState("");
     const hobbiesList = [
-        { label: "Art/Design", value: "Art/Design" },
+        // { label: "Art/Design", value: "Art/Design" },
         { label: "Tech", value: "Tech" },
-        { label: "Sports", value: "Sports" },
+        // { label: "Sports", value: "Sports" },
         { label: "Cooking", value: "Cooking" },
     ];
 
@@ -37,6 +37,7 @@ const PersonalizeForm = () => {
             if (response.status === 200) {
                 alert("Personalization data saved successfully!");
                 navigate('/');
+                localStorage.setItem("hobbies",[response.data.hobbies])
                 // Optionally navigate to another route or reset the form
             }
         } catch (error) {

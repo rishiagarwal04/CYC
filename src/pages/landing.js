@@ -1,11 +1,20 @@
 import React from 'react'
-import News from '../components/news'
+import News from '../components/news.js'
 import Quora_ka_bhai from '../components/Quora_ka_bhai.jsx'
 import YouTubeShorts from '../components/YouTubeShorts.jsx'
 import Testimonials from '../components/Testimonials.jsx'
 import Navbar from '../components/navbar.js'
 import Footer from '../components/footer.js'
-const landing = () => {
+// import { useNavigate } from 'react-router-dom'
+
+const Landing = () => {
+// const navigate=useNavigate();
+   let id=localStorage.getItem("userId")
+
+if(!id){
+window.location.href='/signup'
+}
+  
   return (
     <>
       <Navbar />
@@ -48,4 +57,4 @@ const landing = () => {
   )
 }
 
-export default landing
+export default Landing
