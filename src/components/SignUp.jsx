@@ -42,12 +42,13 @@ const navigate=useNavigate();
             // Handle success
             console.log('User registered:', response.data);
             // alert('Signup successful!');
-            navigate("/personalizeform")
-
             if (response.status === 201) {
                 const id = response.data.user;
                 localStorage.setItem("userId", id);
             }
+            navigate("/personalizeform")
+
+            
 
         } catch (error) {
             // Handle errors

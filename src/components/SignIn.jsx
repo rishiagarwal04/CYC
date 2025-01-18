@@ -1,45 +1,84 @@
-import React from "react";
-import { Link, Links } from "react-router-dom";
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
+
 const Signin = () => {
+    const [formData, setFormData] = useState({
+        username: "",
+        password: "",
+    });
+    const [error, setError] = useState("");
+    const navigate = useNavigate();
+
+    // Handle input changes
+    const handleChange = (e) => {
+        setFormData({
+            ...formData,
+            [e.target.name]: e.target.value,
+        });
+    };
+
+    // Handle form submission
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        setError(""); // Reset error state
+
+        try {
+            const response = await axios.post(`http://localhost:3000/signup/signin`, formData);
+            if (response.status==200) {
+                localStorage.setItem("userId", response.data.userId); // Store token
+                navigate("/dashboard"); // Redirect to dashboard
+            } else {
+                setError(response.data.message || "Invalid username or password");
+            }
+        } catch (err) {
+            setError("Unable to login. Please try again later.");
+        }
+    };
+
     return (
         <div className="flex items-center justify-center h-screen bg-gray-800">
             <div className="bg-gray-900 text-white rounded-lg p-8 w-96 shadow-md">
-                <h2 className="text-2xl font-bold text-center mb-6">Login to Roblox</h2>
+                <h2 className="text-2xl font-bold text-center mb-6">Login to Career Unicorn</h2>
 
-                {/* Username/Email/Phone Field */}
-                <div className="mb-4">
-                    <input
-                        type="text"
-                        placeholder="Username / Phone"
-                        className="w-full p-3 rounded-md bg-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-600"
-                    />
-                </div>
+                <form onSubmit={handleSubmit}>
+                    {/* Username/Email/Phone Field */}
+                    <div className="mb-4">
+                        <input
+                            type="text"
+                            name="usernameOrPhone"
+                            value={formData.usernameOrPhone}
+                            onChange={handleChange}
+                            placeholder="Username / Phone"
+                            className="w-full p-3 rounded-md bg-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-600"
+                            required
+                        />
+                    </div>
 
-                {/* Password Field */}
-                <div className="mb-6">
-                    <input
-                        type="password"
-                        placeholder="Password"
-                        className="w-full p-3 rounded-md bg-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-600"
-                    />
-                </div>
+                    {/* Password Field */}
+                    <div className="mb-6">
+                        <input
+                            type="password"
+                            name="password"
+                            value={formData.password}
+                            onChange={handleChange}
+                            placeholder="Password"
+                            className="w-full p-3 rounded-md bg-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-600"
+                            required
+                        />
+                    </div>
 
-                {/* Login Button */}
-                <button
-                    className="w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 rounded-md transition-colors duration-300"
-                >
-                    Log In
-                </button>
+                    {/* Error Message */}
+                    {error && <p className="text-red-500 text-sm mb-4">{error}</p>}
 
-                {/* Forgot Password or Username */}
-                <p className="text-gray-400 text-sm mt-4">
-                    <a
-                        href="#"
-                        className="text-blue-400 hover:underline"
+                    {/* Login Button */}
+                    <button
+                        type="submit"
+                        className="w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 rounded-md transition-colors duration-300"
                     >
-                        Forgot Password or Username?
-                    </a>
-                </p>
+                        Log In
+                    </button>
+                </form>
 
                 <hr className="my-6 border-gray-600" />
 
