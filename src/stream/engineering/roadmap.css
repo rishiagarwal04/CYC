@@ -9,7 +9,8 @@
   .roadmap-image {
     width: 100%;
     height: 500px;
-    object-fit: fill; /* Adjust based on your image proportions */
+    object-fit: fill;
+    z-index: -10; /* Adjust based on your image proportions */
   }
   
   .checkpoint {

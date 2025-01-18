@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { GoogleGenerativeAI } from '@google/generative-ai';
+import Navbar from '../components/navbar';
 
 // Initialize Google Generative AI instance
 const genAI = new GoogleGenerativeAI('AIzaSyCImF5g7Uu6IqyeOuumQvTdID0pNvLINQ8');
@@ -55,8 +56,8 @@ const ChatApp = () => {
     }
   };
 
-  return (
-    <div style={styles.container}>
+  return (<><Navbar/>
+    <div style={styles.container} className='mt-[px]' >
       <div style={styles.chatHeader}>Welcome to personalised Career Counselling</div>
 
       <div style={styles.chatBody}>
@@ -91,7 +92,7 @@ const ChatApp = () => {
       </div>
 
       {error && <p style={styles.error}>{error}</p>}
-    </div>
+    </div></>
   );
 };
 
@@ -100,6 +101,7 @@ const styles = {
     display: 'flex',
     flexDirection: 'column',
     height: '82vh',
+    top: '100px',
     backgroundColor: '#e5ddd5',
     fontFamily: 'Arial, sans-serif',
   },
