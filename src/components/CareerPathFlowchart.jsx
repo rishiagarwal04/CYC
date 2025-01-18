@@ -1,114 +1,53 @@
-/* global go */
-import React, { useEffect } from 'react';
-import Data from './Data';
-const CareerPathFlowchart = () => {
-    useEffect(() => {
-        // Dynamically load the GoJS script
-        const script = document.createElement('script');
-        script.src = "https://unpkg.com/gojs/release/go-debug.js";
-        script.async = true;
-        document.body.appendChild(script);
+import React, { useState } from 'react';
+import ReactFlow, { Background, Controls } from 'reactflow';
+import 'reactflow/dist/style.css';
 
-        // Initialize GoJS once the script is loaded
-        script.onload = () => {
-            const $ = window.go.GraphObject.make;
+// Nodes and edges for the flowchart
+const nodes = [
+  { id: '1', type: 'input', data: { label: 'Start' }, position: { x: 0, y: 0 } },
+  { id: '2', data: { label: 'Step 1' }, position: { x: 200, y: 100 } },
+  { id: '3', data: { label: 'Step 2' }, position: { x: 400, y: 200 } },
+  { id: '4', type: 'output', data: { label: 'End' }, position: { x: 600, y: 300 } },
+];
 
-            const myDiagram = $(go.Diagram, "myDiagramDiv", {
-                "undoManager.isEnabled": true,
-                layout: $(go.TreeLayout, { angle: 90, layerSpacing: 40 }),
-            });
+const edges = [
+  { id: 'e1-2', source: '1', target: '2', animated: true },
+  { id: 'e2-3', source: '1', target: '3', animated: true },
+  { id: 'e3-4', source: '3', target: '4', animated: true },
+];
 
-     
+// Main Component
+const Flowchart = () => {
+  const [selectedElement, setSelectedElement] = useState(null);
 
+  // Handle click on a node
+  const handleNodeClick = (event, node) => {
+    console.log('Node clicked:', node);
+    setSelectedElement(node); // Update the state with the clicked node
+  };
 
-            myDiagram.nodeTemplate = $(
-                go.Node, "Auto",
-                $(go.Shape, "RoundedRectangle", { fill: "#f2e3ff", strokeWidth: 0 }),
-                $(go.TextBlock, { margin: 8, font: "bold 12pt sans-serif", stroke: "black", textAlign: "center" }, new go.Binding("text", "name"))
-            );
+  return (
+    <div style={{ width: '100%', height: '500px' }}>
+      <ReactFlow
+        nodes={nodes}
+        edges={edges}
+        onNodeClick={handleNodeClick}
+        fitView
+      >
+        <Background />
+        <Controls />
+      </ReactFlow>
 
-            myDiagram.linkTemplate = $(
-                go.Link,
-                { routing: go.Link.Orthogonal, corner: 5 },
-                $(go.Shape, { strokeWidth: 2, stroke: "#555" }),
-                $(go.Shape, { toArrow: "Standard", stroke: null })
-            );
-
-            myDiagram.zoomToFit()
-
-            myDiagram.model = new go.GraphLinksModel(
-                [
-                    // { key: 1, name: "Start" },
-                    { key: 2, name: "9th & 10th" },
-                    { key: 3, name: "Olympiads" },
-                    { key: 4, name: "Skills" },
-
-                    { key: 5, name: "Mathematics" },
-                    { key: 6, name: "Chemistry" },
-                    { key: 7, name: "Physics" },
-                    { key: 8, name: "Science Olympiads" },
-                    { key: 9, name: "Technology and Computing" },
-                    
-                    { key: 10, name: "Programming & Development" },
-                    { key: 11, name: "Hardware & Electronics" },
-                    { key: 12, name: "Data & Analytics" },
-                    { key: 13, name: "Creative & Design Tools" },
-                    { key: 14, name: "Cybersecurity & Cloud" },
-                    { key: 15, name: "Emerging Technologies" },
-                    { key: 16, name: "Collaboration & Version Control" },
-                    { key: 17, name: "Competitions & Challenges" },
-                    { key: 18, name: "General knowledge and Miscellaneous" },
-                ],
-                [
-                   
-                    { from: 2, to: 3 },
-                    { from: 2, to: 4 },
-        
-                    { from: 4, to: 10 },
-                    { from: 4, to: 11 },
-                    { from: 4, to: 12 },
-                    { from: 4, to: 13 },
-                    { from: 4, to: 14 },
-                    { from: 4, to: 15 },
-                    { from: 4, to: 16 },
-                    { from: 4, to: 17 },
-                    { from: 3, to: 5 },
-                    { from: 3, to: 6 },
-                    { from: 3, to: 7 },
-                    { from: 3, to: 8 },
-                    { from: 3, to: 9 },
-                    { from: 3, to: 18 }
-                ]
-            );
-
-            myDiagram.zoomToFit();
-
-            // Optional: Set a minimum and maximum scale
-            myDiagram.scale = Math.min(myDiagram.scale, 1);
-
-    
-        };
-
-        // Clean up script when component unmounts
-        return () => {
-            document.body.removeChild(script);
-        };
-    }, []);
-
-    return (
-        <>
-        <div>
-            <h2>Career Path Flowchart After Engineering</h2>
-            <div id="myDiagramDiv" style={{ width: '100%',height:'1000px'}}/>
+      {/* Display the selected element */}
+      {selectedElement && (
+        <div style={{ marginTop: 20 }}>
+          <h3>Selected Node:</h3>
+          <p>Id: {selectedElement.id}</p>
+          <p>Label: {selectedElement.data.label}</p>
         </div>
-
-        <Data/>
-{/* 
-        <div className='absolute w-[200px] h-[100px] bg-white top-5 left-0 z-10'>
-
-        </div> */}
-        </>
-    );
+      )}
+    </div>
+  );
 };
 
-export default CareerPathFlowchart;
+export default Flowchart;

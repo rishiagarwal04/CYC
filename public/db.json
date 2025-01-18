@@ -1,0 +1,35 @@
+{
+    "newsItems": [
+      {
+        "id": 1,
+        "headline": "Breaking News: New Tech Innovation",
+        "description": "A groundbreaking innovation in technology has just been announced.",
+        "link": "#"
+      },
+      {
+        "id": 2,
+        "headline": "Global Market Update",
+        "description": "The global markets have seen a significant shift due to recent economic policies.",
+        "link": "#"
+      },
+      {
+        "id": 3,
+        "headline": "Health Update: Latest Vaccines",
+        "description": "New vaccines for a common disease have been approved for public use.",
+        "link": "#"
+      },
+      {
+        "id": 4,
+        "headline": "Environment: Climate Change Insights",
+        "description": "Scientists provide new insights into the impact of climate change.",
+        "link": "#"
+      },
+      {
+        "id": 5,
+        "headline": "Sports: Major League Championship",
+        "description": "The major league championship has concluded with an unexpected winner.",
+        "link": "#"
+      }
+    ]
+  }
+  

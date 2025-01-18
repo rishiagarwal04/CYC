@@ -1,51 +1,80 @@
-import React from 'react'
-import News from '../components/news'
-import Quora_ka_bhai from '../components/Quora_ka_bhai.jsx'
-import YouTubeShorts from '../components/YouTubeShorts.jsx'
-import Testimonials from '../components/Testimonials.jsx'
-import Navbar from '../components/navbar.js'
-import Footer from '../components/footer.js'
-const landing = () => {
+import React from 'react';
+import News from '../components/news';
+import Quora_ka_bhai from '../components/Quora_ka_bhai.jsx';
+import YouTubeShorts from '../components/YouTubeShorts.jsx';
+import Testimonials from '../components/Testimonials.jsx';
+import Navbar from '../components/navbar.js';
+import Footer from '../components/footer.js';
+import MarketTrends from '../stream/engineering/marketTrendsEng';
+import RoadmapEng from '../stream/engineering/roadmapEng';
+
+const Landing = () => {
   return (
-    <>
+    <div>
       <Navbar />
-      <div className='flex flex-row align-items bg-pink-500 h-[610px] space-x-3 px-4 py-4'>
-        <div className='bg-red-400 w-1/3  '>
-          <News />
+      {/* Add padding-top equal to navbar height */}
+      <div className="pt-20">
+        {/* Section below Navbar */}
+        <div
+          style={styles.fontcursiv}
+          className="h-20 flex justify-center items-center bg-[#684883] z-100 text-white font-semibold"
+        >
+          <h2>Your future depends on what you do today</h2>
         </div>
-        <div className='bg-red-400 w-2/3 overflow-y-scroll  h-[600px] space-y-2 mb-[40px]'>
 
-          <div className='bg-blue-400 h-[500px]'>
-            roadmap
-          </div>
-          <div className='bg-blue-400 h-[500px]'>
-            market trends
-          </div>
-          <div className="bg-blue-400 h-[600px]">
-            <div className=" h-[95%] overflow-y-scroll p-4">
-              Ask / Find Questions
-              <Quora_ka_bhai />
+        <div>
+          <div className="flex flex-row align-items max-h-full space-x-3 px-4 py-4">
+            {/* News Section */}
+            <div className="h-[1010px] w-1/4">
+              <News />
             </div>
 
-          </div>
-          <div className="bg-blue-400 h-[600px]">
-            <div className=" h-[95%] overflow-y-scroll p-4">
-              <YouTubeShorts />
+            {/* Main Content Section */}
+            <div className="w-3/4 h-[600px] space-y-4">
+              {/* Roadmap Section */}
+              <div className="h-[500px] bg-[#f4ecfa] rounded-xl">
+                <RoadmapEng />
+              </div>
+
+              {/* Market Trends Section */}
+              <div className="bg-[#f4ecfa] h-[500px]">
+                <MarketTrends />
+              </div>
             </div>
           </div>
-          <div className='bg-blue-400 h-[500px]'>
-            testimonials in animation , horizontally , pause on hover
+          <div>
+            {/* Q&A Section */}
+            <div className="bg-[#f4ecfa] h-[600px] m-4">
+              <div className="h-[95%] flex flex-col justify-center items-center overflow-hidden">
+                <Quora_ka_bhai />
+              </div>
+            </div>
 
-            <div className='flex'>
+            {/* Short Videos Section */}
+            <div>
+              <div className="h-[95%] p-4">
+                <YouTubeShorts />
+              </div>
+            </div>
 
-              <Testimonials />
+            {/* Testimonials Section */}
+            <div className="bg-[#f4ecfa] h-[200px]">
+              <div className="flex justify-center items-center">
+                <Testimonials />
+              </div>
             </div>
           </div>
         </div>
       </div>
-      <Footer />
-    </>
-  )
-}
+      {/* <Footer /> */}
+    </div>
+  );
+};
 
-export default landing
+const styles = {
+  fontcursiv: {
+    fontFamily: 'cursive',
+  },
+};
+
+export default Landing;

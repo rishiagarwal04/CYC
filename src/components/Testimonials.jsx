@@ -34,10 +34,10 @@ const Testimonials = () => {
         {testimonials.map((testimonial) => (
             <div
             key={testimonial.id}
-            className="flex-shrink-0 w-72 bg-white p-6 rounded-lg shadow-lg text-center "
+            className="flex-shrink-0 w-72 bg-[#685aab] text-white p-6 rounded-lg shadow-lg text-center "
             >
-            <p className="text-gray-600 text-sm mb-4">"{testimonial.text}"</p>
-            <p className="text-gray-800 text-sm font-bold">- {testimonial.author}</p>
+            <p className="text-sm mb-4">"{testimonial.text}"</p>
+            <p className="text-sm font-bold">~ {testimonial.author}</p>
           </div>
         ))}
         

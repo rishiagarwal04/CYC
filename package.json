@@ -1,27 +1,35 @@
 {
-  "homepage": "https://priya2601.github.io/career_unicorn",
+  "homepage": "https://pria2601.github.io/",
   "name": "career_unicorn",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@copilotkit/react-core": "^1.4.8-coagents-v0-3.1",
+    "@copilotkit/react-ui": "^1.4.8-coagents-v0-3.1",
+    "@google/generative-ai": "^0.21.0",
     "@headlessui/react": "^2.2.0",
     "@heroicons/react": "^2.2.0",
     "axios": "^1.7.9",
     "cra-template": "1.2.0",
+    "d3": "^7.9.0",
+    "dagre-d3": "^0.6.4",
     "gojs": "^3.0.18",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "react-router-dom": "^7.1.1",
+    "react-router-dom": "^7.1.2",
     "react-scripts": "5.0.1",
+    "reactflow": "^11.11.4",
+    "styled-components": "^6.1.14",
     "web-vitals": "^4.2.4"
   },
   "scripts": {
-    "start": "react-scripts start",
     "predeploy": "npm run build",
     "deploy": "gh-pages -d build",
+    "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "dev": "react-scripts start"
   },
   "eslintConfig": {
     "extends": [

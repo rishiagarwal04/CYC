@@ -75,7 +75,7 @@ const YouTubeShorts = () => {
   return (
 
 
-    <div className="flex justify-center items-center min-h-screen ">
+    <div className="flex justify-center items-center min-h-screen bg-[#f4ecfa] ">
     {/* Main Video Thumbnail */}
     <div className="w-[360px] h-[640px] overflow-hidden relative rounded-lg">
         <video
