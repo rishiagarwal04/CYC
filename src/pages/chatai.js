@@ -1,5 +1,5 @@
 
-
+import Navbar from '../components/navbar';
  import React, { useState } from 'react';
 import { GoogleGenerativeAI } from '@google/generative-ai';
 
@@ -51,7 +51,8 @@ const Chat = () => {
     }
   };
 
-  return (
+  return (<>
+  <Navbar/>
     <div style={{ padding: '20px', fontFamily: 'Arial, sans-serif' }}>
       <div className="chat-container" style={styles.container}>
         <h1 style={{ textAlign: 'center', color: '#007bff' }}>Generative AI Chat App</h1>
@@ -105,7 +106,7 @@ const Chat = () => {
 
         {error && <p style={{ color: 'red', marginTop: '10px' }}>{error}</p>}
       </div>
-    </div>
+    </div></>
   );
 };
 
