@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
+import rr from "./BG-IMAGEROBLOX.jpg";
 const SignUp = () => {
 const navigate=useNavigate();
     const [formData, setFormData] = useState({
@@ -42,12 +43,13 @@ const navigate=useNavigate();
             // Handle success
             console.log('User registered:', response.data);
             // alert('Signup successful!');
-            navigate("/personalizeform")
-
             if (response.status === 201) {
                 const id = response.data.user;
                 localStorage.setItem("userId", id);
             }
+            navigate("/personalizeform")
+
+            
 
         } catch (error) {
             // Handle errors
@@ -73,8 +75,7 @@ const navigate=useNavigate();
         <div
             className="min-h-screen flex items-center justify-center relative"
             style={{
-                backgroundImage:
-                    "url('https://images.rbxcdn.com/782b7fc18a24ee997efd9a7f02fa4bf9-bg_08072019.jpg')",
+                backgroundImage: `url(${rr})`,                    
                 backgroundSize: "cover",
                 backgroundPosition: "center",
             }}

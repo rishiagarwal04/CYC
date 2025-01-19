@@ -1,7 +1,8 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 const News = () => {
   const containerRef = useRef(null);
+  const [repeatedNewsItems, setRepeatedNewsItems] = useState([]);
 
   useEffect(() => {
     const scrollContainer = containerRef.current;
@@ -9,23 +10,39 @@ const News = () => {
     let scrollStep = 1; // Speed of scrolling
     let scrollInterval = null;
 
-    const startScrolling = (id) => {
-      scrollInterval = setInterval(() => {
-        if (scrollContainer) {
-          if (
-            scrollContainer.scrollTop + scrollContainer.clientHeight >=
-            scrollContainer.scrollHeight
-          ) {
-            // End of content, scroll back to top (loop to the first news using modulus)
-            scrollContainer.scrollTop = 0;
-            id=id-20;
-          } else {
-            scrollContainer.scrollTop += scrollStep; // Scroll down
-          }
-        }
-      }, 50); // Adjust interval time for smoothness
+    // Function to duplicate news items to fill the container
+    const fillContainerWithNews = () => {
+      if (!scrollContainer) return;
+
+      const containerHeight = scrollContainer.clientHeight;
+      const itemHeight = scrollContainer.scrollHeight / newsItems.length;
+      const numItemsToFill = Math.ceil(containerHeight / itemHeight);
+
+      const repeatedNews = [];
+      for (let i = 0; i < numItemsToFill; i++) {
+        repeatedNews.push(...newsItems);
+      }
+
+      setRepeatedNewsItems(repeatedNews);
     };
 
+    // Start auto-scrolling from bottom to top
+    const startScrolling = () => {
+      if (scrollContainer) {
+        scrollContainer.scrollTop = scrollContainer.scrollHeight; // Start from the bottom
+        scrollInterval = setInterval(() => {
+          if (
+            scrollContainer.scrollTop <= 0
+          ) {
+            scrollContainer.scrollTop = scrollContainer.scrollHeight; // Loop back to the bottom
+          } else {
+            scrollContainer.scrollTop -= scrollStep; // Scroll up
+          }
+        },0); // Adjust interval time for smoothness
+      }
+    };
+
+    fillContainerWithNews();
     startScrolling();
 
     return () => {
@@ -34,42 +51,61 @@ const News = () => {
   }, []);
 
   const newsItems = [
-    { id: 1, headline: 'New 1', description: 'This is the latest update about News 1.', link: '#' },
-    { id: 2, headline: 'New 2', description: 'This is the latest update about News 2.', link: '#' },
-    { id: 3, headline: 'New 3', description: 'This is the latest update about News 3.', link: '#' },
-    { id: 4, headline: 'New 4', description: 'This is the latest update about News 4.', link: '#' },
-    { id: 5, headline: 'New 5', description: 'This is the latest update about News 5.', link: '#' },
-    { id: 6, headline: 'New 6', description: 'This is the latest update about News 6.', link: '#' },
-    { id: 7, headline: 'New 7', description: 'This is the latest update about News 7.', link: '#' },
-    { id: 8, headline: 'New 8', description: 'This is the latest update about News 8.', link: '#' },
-    { id: 9, headline: 'New 9', description: 'This is the latest update about News 9.', link: '#' },
-    { id: 10, headline: 'New 10', description: 'This is the latest update about News 10.', link: '#' },
-    { id: 11, headline: 'New 11', description: 'This is the latest update about News 11.', link: '#' },
-    { id: 12, headline: 'New 12', description: 'This is the latest update about News 12.', link: '#' },
-    { id: 13, headline: 'New 13', description: 'This is the latest update about News 13.', link: '#' },
-    { id: 14, headline: 'New 14', description: 'This is the latest update about News 14.', link: '#' },
-    { id: 15, headline: 'New 15', description: 'This is the latest update about News 15.', link: '#' },
-    { id: 16, headline: 'New 16', description: 'This is the latest update about News 16.', link: '#' },
-    { id: 17, headline: 'New 17', description: 'This is the latest update about News 17.', link: '#' },
-    { id: 18, headline: 'New 18', description: 'This is the latest update about News 18.', link: '#' },
-    { id: 19, headline: 'New 19', description: 'This is the latest update about News 19.', link: '#' },
-    { id: 20, headline: 'New 20', description: 'This is the latest update about News 20.', link: '#' }
+    {
+      id: 1,
+      headline: "NEET 2025 to be held in a single shift",
+      description:
+        "The National Testing Agency (NTA) has confirmed that the NEET 2025 examination will be conducted in a single shift through the traditional pen-and-paper format.",
+      link: "https://ndtv.in/career?utm_source=chatgpt.com",
+    },
+    {
+      id: 2,
+      headline: "CBSE tightens norms",
+      description:
+        "The Central Board of Secondary Education (CBSE) has identified 29 schools for violating regulations, potentially leading to the cancellation of their affiliation.",
+      link: "https://www.abplive.com/education?utm_source=chatgpt.com",
+    },
+    {
+      id: 3,
+      headline: "Coal India Recruitment",
+      description:
+        "Coal India Limited has opened applications for multiple management trainee roles, presenting a significant opportunity for job seekers.",
+      link: "https://www.abplive.com/education?utm_source=chatgpt.com",
+    },
+    {
+      id: 4,
+      headline: "UP Board: High-Tech Monitoring",
+      description:
+        "The Uttar Pradesh Board of Secondary Education (UPMSP) will implement 24/7 control room surveillance and advanced monitoring systems to prevent malpractice during board exams.",
+      link: "https://navbharattimes.indiatimes.com/education/education-news/articlelist/2303761.cms?utm_source=chatgpt.com",
+    },
+    {
+      id: 5,
+      headline: "BPSC 70th: Final Answer Key",
+      description:
+        "The Bihar Public Service Commission (BPSC) has published the final answer key for the 70th preliminary exam, nullifying four questions.",
+      link: "https://www.livehindustan.com/career/education?utm_source=chatgpt.com",
+    },
   ];
 
   return (
     <>
-      <div className="h-14 font-bold text-center py-2  text-white rounded-lg bg-[#8b65ab]">
+      <div className="h-14 font-bold text-center py-2 text-white rounded-lg bg-[#8b65ab]">
         LATEST NEWS
       </div>
       <div
         ref={containerRef}
-        className="flex flex-col overflow-hidden space-y-2 h-[955px]"
-        style={{ scrollBehavior: 'smooth', padding: '1px', border: '1px solid #ddd' }}
+        className="flex flex-col overflow-hidden h-[1900px] space-y-2"
+        style={{
+          scrollBehavior: "smooth",
+          padding: "1px",
+          border: "1px solid #ddd",
+        }}
       >
-        {newsItems.map((news, idx) => (
+        {repeatedNewsItems.map((news, idx) => (
           <div
-            key={news.id}
-            className="min-h-30 bg-[#f4ecfa]p-1 rounded-lg shadow-md"
+            key={`${news.id}-${idx}`}
+            className="min-h-30 bg-[#f4ecfa] p-1 rounded-lg shadow-md"
           >
             <h3 className="font-semibold text-lg">{news.headline}</h3>
             <p className="text-sm text-gray-700">{news.description}</p>

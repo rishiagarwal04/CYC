@@ -6,6 +6,7 @@ import Navbar from '../components/navbar';
 const genAI = new GoogleGenerativeAI('AIzaSyCImF5g7Uu6IqyeOuumQvTdID0pNvLINQ8');
 const model = genAI.getGenerativeModel({ model: 'gemini-pro' });
 
+
 const ChatApp = () => {
   const [message, setMessage] = useState('');
   const [chatHistory, setChatHistory] = useState([]);
@@ -56,26 +57,40 @@ const ChatApp = () => {
     }
   };
 
-  return (<><Navbar/>
-    <div style={styles.container} className='mt-[px]' >
+  return (<><Navbar />
+    <div style={styles.container} className='mt-20 h-full' >
       <div style={styles.chatHeader}>Welcome to personalised Career Counselling</div>
 
       <div style={styles.chatBody}>
-      <div style={styles.botMessage}>
-        <p style={styles.messageText}><>Rishi ki image</></p>
+        <div style={styles.botMessage}>
+          <p style={styles.messageText}><>👋 Hello, and welcome to CareerClips – your Personal Career Counselor! 🎯
+I'm here to help you explore, plan, and navigate your career journey. Whether you're:
+
+🌱 Just starting out,
+📈 Looking to grow, or
+🔄 Seeking a career shift,
+I've got tailored advice, resources, and insights for you.
+
+👉 How can I assist you today?
+1️⃣ Explore new career paths
+2️⃣ Build a standout resume
+3️⃣ Prepare for interviews
+4️⃣ Gain skills for your dream job
+
+Let’s get started on unlocking your potential! 🚀</></p>
+        </div>
+        {chatHistory.map((chat, index) => (
+          <React.Fragment key={`chat-${index}`}>
+            <div style={styles.userMessage}>
+              <p style={styles.messageText}>{chat.user}</p>
+            </div>
+            <div style={styles.botMessage}>
+              <p style={styles.messageText}>{chat.bot}</p>
+            </div>
+          </React.Fragment>
+        ))}
+        {loading && <div style={styles.loading}>AI is typing...</div>}
       </div>
-  {chatHistory.map((chat, index) => (
-    <React.Fragment key={`chat-${index}`}>
-      <div style={styles.userMessage}>
-        <p style={styles.messageText}>{chat.user}</p>
-      </div>
-      <div style={styles.botMessage}>
-        <p style={styles.messageText}>{chat.bot}</p>
-      </div>
-    </React.Fragment>
-  ))}
-  {loading && <div style={styles.loading}>AI is typing...</div>}
-</div>
 
       <div style={styles.chatFooter}>
         <input
@@ -100,7 +115,7 @@ const styles = {
   container: {
     display: 'flex',
     flexDirection: 'column',
-    height: '82vh',
+    height: '89vh',
     top: '100px',
     backgroundColor: '#e5ddd5',
     fontFamily: 'Arial, sans-serif',

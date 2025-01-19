@@ -1,14 +1,22 @@
 import React, { useState } from "react";
 
 const testimonials = [
-  { id: 1, text: "This platform changed my life! Highly recommended.", author: "Sachin" },
-  { id: 2, text: "Amazing experience! Will definitely use it again.", author: "Sachin" },
-  { id: 3, text: "Excellent service and support. Couldn't be happier!", author: "Sachin" },
-  { id: 4, text: "Five stars! Everything I needed and more.", author: "Sachin" },
-  { id: 5, text: "Absolutely fantastic! Highly efficient and reliable.", author: "Sachin" },
-  { id: 6, text: "Absolutely fantastic! Highly efficient and reliable.", author: "Sachin" },
+  { id: 1, text: "John consistently excels in academics, showing outstanding dedication and analytical skills.", author: "Ms. Clara White, Teacher" },
+  { id: 2, text: "Priya’s leadership and teamwork were key to our debate team's success.", author: "Mr. Rajesh Khanna, Coach" },
+  { id: 3, text: "Rahul’s determination and perseverance are truly inspiring.", author: "Mrs. Anjali Sharma, Teacher" },
+  { id: 4, text: "Meera’s innovative ideas and creative approach stand out in every project.", author: "Dr. Kavita Roy, Faculty" },
+  { id: 5, text: "Ananya is a disciplined and talented all-rounder with great potential.", author: "Mr. David Lee, Principal" },
+  { id: 1, text: "John consistently excels in academics, showing outstanding dedication and analytical skills.", author: "Ms. Clara White, Teacher" },
+  { id: 2, text: "Priya’s leadership and teamwork were key to our debate team's success.", author: "Mr. Rajesh Khanna, Coach" },
+  { id: 3, text: "Rahul’s determination and perseverance are truly inspiring.", author: "Mrs. Anjali Sharma, Teacher" },
+  { id: 4, text: "Meera’s innovative ideas and creative approach stand out in every project.", author: "Dr. Kavita Roy, Faculty" },
+  { id: 5, text: "Ananya is a disciplined and talented all-rounder with great potential.", author: "Mr. David Lee, Principal" },
+  { id: 1, text: "John consistently excels in academics, showing outstanding dedication and analytical skills.", author: "Ms. Clara White, Teacher" },
+  { id: 2, text: "Priya’s leadership and teamwork were key to our debate team's success.", author: "Mr. Rajesh Khanna, Coach" },
+  { id: 3, text: "Rahul’s determination and perseverance are truly inspiring.", author: "Mrs. Anjali Sharma, Teacher" },
+  { id: 4, text: "Meera’s innovative ideas and creative approach stand out in every project.", author: "Dr. Kavita Roy, Faculty" },
+  { id: 5, text: "Ananya is a disciplined and talented all-rounder with great potential.", author: "Mr. David Lee, Principal" },
 ];
-
 const Testimonials = () => {
   const [isHovered, setIsHovered] = useState(false);
 

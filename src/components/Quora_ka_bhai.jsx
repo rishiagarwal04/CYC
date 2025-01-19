@@ -50,7 +50,7 @@ const QandA = () => {
   );
 
   return (
-    <div className=" mx-auto  bg-[#8b65ab] rounded-lg w-100 overflow-y-scroll mt-4">
+    <div className=" mx-auto  bg-[#8b65ab] rounded-lg w-100 overflow-y-scroll mt-4 w-full">
       <h1 className="text-3xl font-bold text-white text-center my-4">Questions</h1>
 
       {/* Search Bar */}
@@ -92,7 +92,7 @@ const QandA = () => {
       <div className="flex flex-wrap">
         {filteredQuestions.map((question) => (
           <div key={question._id} className="w-1/3 p-4">
-            <div className="p-6 bg-white border border-gray-200 rounded-lg shadow-md hover:shadow-lg max-h-[300px]">
+            <div className="p-6 bg-white border border-gray-200 rounded-lg shadow-md w-full hover:shadow-lg max-h-[300px]">
               <h3 className="text-xl font-semibold mb-2">Q) {question.title}</h3>
               <p className="text-sm text-gray-500">--{question.author}</p>
               <p className="text-sm text-gray-400">{new Date(question.createdAt).toLocaleDateString()}</p>

@@ -7,8 +7,14 @@ import Navbar from '../components/navbar.js';
 import Footer from '../components/footer.js';
 import MarketTrends from '../stream/engineering/marketTrendsEng';
 import RoadmapEng from '../stream/engineering/roadmapEng';
+import EngineeringData from '../Data/Engineer/MarketTrends.jsx';
 
 const Landing = () => {
+  let id=localStorage.getItem("userId")
+
+  if(!id){
+  window.location.href='/signup'
+  }
   return (
     <div>
       <Navbar />
@@ -23,9 +29,9 @@ const Landing = () => {
         </div>
 
         <div>
-          <div className="flex flex-row align-items max-h-full space-x-3 px-4 py-4">
+          <div className="flex flex-row align-items  space-x-3 px-4 py-4">
             {/* News Section */}
-            <div className="h-[1010px] w-1/4">
+            <div className=" w-1/4">
               <News />
             </div>
 
@@ -37,9 +43,9 @@ const Landing = () => {
               </div>
 
               {/* Market Trends Section */}
-              <div className="bg-[#f4ecfa] h-[500px]">
-                <MarketTrends />
-              </div>
+              {/* <div className="bg-[#f4ecfa] h-[500px]"> */}
+                <EngineeringData />
+              {/* </div> */}
             </div>
           </div>
           <div>
