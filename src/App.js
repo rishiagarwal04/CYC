@@ -329,7 +329,7 @@ function App() {
       errorElement: <div>Page not found!</div>,  
     },
     {
-      path: '/personalizeform',
+      path: '/personalize/:id',
       element: <div> <PersonalizeForm /></div>, 
       errorElement: <div>Page not found!</div>,  
     },

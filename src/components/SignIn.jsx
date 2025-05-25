@@ -4,11 +4,11 @@ import axios from "axios";
 
 const Signin = () => {
     const [formData, setFormData] = useState({
-        username: "",
+        username: "", // Fixed field name to match input
         password: "",
     });
     const [error, setError] = useState("");
-    const navigate = useNavigate();
+    const navigate = useNavigate()
 
     // Handle input changes
     const handleChange = (e) => {
@@ -24,15 +24,21 @@ const Signin = () => {
         setError(""); // Reset error state
 
         try {
-            const response = await axios.post(`http://localhost:3000/signup/signin`, formData);
-            if (response.status==200) {
-                localStorage.setItem("userId", response.data.userId); // Store token
-                navigate("/dashboard"); // Redirect to dashboard
+            console.log("Form data before submission:", formData); // Debugging log
+            const response = await axios.post(`http://localhost:5000/signup/signin`, formData); // Changed to POST
+            console.log("Response data:", response.data);
+
+            if (response.status === 200) {
+                localStorage.setItem("userId", response.data.userId); // Store userId
+                navigate("/"); // Redirect to dashboard
             } else {
                 setError(response.data.message || "Invalid username or password");
             }
         } catch (err) {
-            setError("Unable to login. Please try again later.");
+            console.error("Login error:", err.response || err.message); // Improved error logging
+            setError(
+                err.response?.data?.message || "Unable to login. Please try again later."
+            );
         }
     };
 
@@ -46,8 +52,8 @@ const Signin = () => {
                     <div className="mb-4">
                         <input
                             type="text"
-                            name="usernameOrPhone"
-                            value={formData.usernameOrPhone}
+                            name="username"
+                            value={formData.username}
                             onChange={handleChange}
                             placeholder="Username / Phone"
                             className="w-full p-3 rounded-md bg-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-600"

@@ -5,9 +5,7 @@ import rr from "./BG-IMAGEROBLOX.jpg";
 const SignUp = () => {
 const navigate=useNavigate();
     const [formData, setFormData] = useState({
-        month: "",
-        day: "",
-        year: "",
+        birthday:"",
         username: "",
         password: "",
         gender: "",
@@ -24,17 +22,17 @@ const navigate=useNavigate();
         e.preventDefault();
 
         // Combine the birthday fields into one object
-        const birthday = {
-            month: formData.month,
-            day: formData.day,
-            year: formData.year,
-        };
+        // const birthday = {
+        //     month: formData.month,
+        //     day: formData.day,
+        //     year: formData.year,
+        // };
 
         try {
             const response = await axios.post('http://localhost:5000/signup', {
                 username: formData.username,
                 password: formData.password,
-                birthday,
+                birthday: formData.birthday,
                 gender: formData.gender,
                 contact: formData.contact,
                 qualification: formData.qualification,
@@ -59,17 +57,17 @@ const navigate=useNavigate();
     };
 
 
-    const months = [
-        "January", "February", "March", "April", "May", "June",
-        "July", "August", "September", "October", "November", "December"
-    ];
+    // const months = [
+    //     "January", "February", "March", "April", "May", "June",
+    //     "July", "August", "September", "October", "November", "December"
+    // ];
 
     // Generate days dynamically
-    const days = Array.from({ length: 31 }, (_, i) => i + 1);
+    // const days = Array.from({ length: 31 }, (_, i) => i + 1);
 
     // Generate years dynamically (e.g., 100 years back)
-    const currentYear = new Date().getFullYear();
-    const years = Array.from({ length: 100 }, (_, i) => currentYear - i);
+    // const currentYear = new Date().getFullYear();
+    // const years = Array.from({ length: 100 }, (_, i) => currentYear - i);
 
     return (
         <div
@@ -103,45 +101,7 @@ const navigate=useNavigate();
                 <div className="mb-4">
                     <label className="block text-white mb-1">Birthday</label>
                     <div className="flex space-x-2">
-                        <select
-                            name="month"
-                            value={formData.month}
-                            onChange={handleChange}
-                            className="flex-1 p-3 rounded-md border border-gray-600 bg-gray-700 text-white"
-                        >
-                            <option value="">Month</option>
-                            {months.map((month, index) => (
-                                <option key={index} value={month}>
-                                    {month}
-                                </option>
-                            ))}
-                        </select>
-                        <select
-                            name="day"
-                            value={formData.day}
-                            onChange={handleChange}
-                            className="flex-1 p-3 rounded-md border border-gray-600 bg-gray-700 text-white"
-                        >
-                            <option value="">Day</option>
-                            {days.map((day) => (
-                                <option key={day} value={day}>
-                                    {day}
-                                </option>
-                            ))}
-                        </select>
-                        <select
-                            name="year"
-                            value={formData.year}
-                            onChange={handleChange}
-                            className="flex-1 p-3 rounded-md border border-gray-600 bg-gray-700 text-white"
-                        >
-                            <option value="">Year</option>
-                            {years.map((year) => (
-                                <option key={year} value={year}>
-                                    {year}
-                                </option>
-                            ))}
-                        </select>
+                        <input type="date" name="birthday" value={formData.birthday}/>
                     </div>
                 </div>
 

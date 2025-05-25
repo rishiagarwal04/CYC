@@ -13,7 +13,7 @@ app.use(cors());
 app.use(express.json());
 
 mongoose
-  .connect("mongodb+srv://priyagawshinde0005:276JcJIHrmDaLdAr@cluster0.0sets.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0/career_unicorn")
+  .connect("mongodb://localhost:27017/unicorn",)
   .then(() => console.log("Connected to MongoDB"))
   .catch((err) => console.error("MongoDB connection error:", err));
 

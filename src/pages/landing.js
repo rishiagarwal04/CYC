@@ -12,9 +12,9 @@ import EngineeringData from '../Data/Engineer/MarketTrends.jsx';
 const Landing = () => {
   let id=localStorage.getItem("userId")
 
-  if(!id){
-  window.location.href='/signup'
-  }
+  // if(!id){
+  // window.location.href='/signup'
+  // }
   return (
     <div>
       <Navbar />

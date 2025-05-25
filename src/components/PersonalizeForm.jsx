@@ -1,24 +1,24 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+
 const PersonalizeForm = () => {
-    const navigate=useNavigate();
-    const [showHobbies, setShowHobbies] = useState(false);
-    const [selectedHobbies, setSelectedHobbies] = useState([]);
+    const navigate = useNavigate();
+    const [showInterests, setShowInterests] = useState(false);
+    const [selectedInterests, setSelectedInterests] = useState([]);
+    const [coursesDone, setCoursesDone] = useState("");
     const [skillset, setSkillset] = useState("");
-    const hobbiesList = [
-        // { label: "Art/Design", value: "Art/Design" },
+    const [futureGoal, setFutureGoal] = useState("");
+    const interestsList = [
         { label: "Tech", value: "Tech" },
-        // { label: "Sports", value: "Sports" },
         { label: "Cooking", value: "Cooking" },
     ];
 
-    const toggleHobby = (hobby) => {
-        if (selectedHobbies.includes(hobby)) {
-            setSelectedHobbies(selectedHobbies.filter((item) => item !== hobby));
+    const toggleInterest = (interest) => {
+        if (selectedInterests.includes(interest)) {
+            setSelectedInterests(selectedInterests.filter((item) => item !== interest));
         } else {
-            setSelectedHobbies([...selectedHobbies, hobby]);
+            setSelectedInterests([...selectedInterests, interest]);
         }
     };
 
@@ -26,19 +26,21 @@ const PersonalizeForm = () => {
         e.preventDefault();
 
         const formData = {
-            hobbies: selectedHobbies,
-            skillset:skillset
+            interests: selectedInterests,
+            coursesDone: coursesDone,
+            skillset: skillset,
+            futureGoal: futureGoal || null, // Send null if futureGoal is empty
         };
 
         try {
             const id = localStorage.getItem('userId');
-
-            const response = await axios.put(`http://localhost:5000/signup/personalize/${id}`, formData); // Replace with your backend endpoint
+            const response = await axios.post(`http://localhost:5000/signup/personalize/${id}`, formData);
             if (response.status === 200) {
                 alert("Personalization data saved successfully!");
+                localStorage.setItem("interests", JSON.stringify(response.data.interests));
+                localStorage.setItem("coursesDone", response.data.coursesDone);
+                localStorage.setItem("futureGoal", response.data.futureGoal || "");
                 navigate('/');
-                localStorage.setItem("hobbies",[response.data.hobbies])
-                // Optionally navigate to another route or reset the form
             }
         } catch (error) {
             console.error("Error submitting form data:", error.response?.data || error.message);
@@ -66,41 +68,41 @@ const PersonalizeForm = () => {
                 </h2>
 
                 <form onSubmit={handleSubmit}>
-                    {/* Interests/Hobbies */}
+                    {/* Interests */}
                     <div className="mb-4">
                         <label className="text-gray-300 block mb-2">
-                            What are your interests/hobbies?
+                            What are your interests?
                         </label>
                         <div className="relative">
                             <button
                                 type="button"
-                                onClick={() => setShowHobbies(!showHobbies)}
+                                onClick={() => setShowInterests(!showInterests)}
                                 className="w-full px-4 py-2 bg-gray-700 text-gray-300 rounded-md border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
                             >
-                                {selectedHobbies.length > 0
-                                    ? selectedHobbies.join(", ")
-                                    : "Select your hobbies"}
+                                {selectedInterests.length > 0
+                                    ? selectedInterests.join(", ")
+                                    : "Select your interests"}
                             </button>
-                            {showHobbies && (
+                            {showInterests && (
                                 <div className="z-10 bg-gray-800 border border-gray-600 rounded-md mt-2 p-4 max-h-40 overflow-y-auto">
-                                    {hobbiesList.map((hobby) => (
+                                    {interestsList.map((interest) => (
                                         <div
-                                            key={hobby.value}
+                                            key={interest.value}
                                             className="flex items-center mb-2"
                                         >
                                             <input
                                                 type="checkbox"
-                                                id={hobby.value}
-                                                value={hobby.value}
-                                                checked={selectedHobbies.includes(hobby.value)}
-                                                onChange={() => toggleHobby(hobby.value)}
+                                                id={interest.value}
+                                                value={interest.value}
+                                                checked={selectedInterests.includes(interest.value)}
+                                                onChange={() => toggleInterest(interest.value)}
                                                 className="mr-2 cursor-pointer"
                                             />
                                             <label
-                                                htmlFor={hobby.value}
+                                                htmlFor={interest.value}
                                                 className="text-gray-300 cursor-pointer"
                                             >
-                                                {hobby.label}
+                                                {interest.label}
                                             </label>
                                         </div>
                                     ))}
@@ -109,17 +111,45 @@ const PersonalizeForm = () => {
                         </div>
                     </div>
 
+                    {/* Courses Done */}
+                    <div className="mb-4">
+                        <label className="text-gray-300 block mb-2">
+                            Courses you have completed
+                        </label>
+                        <textarea
+                            rows="3"
+                            value={coursesDone}
+                            onChange={(e) => setCoursesDone(e.target.value)}
+                            className="w-full px-4 py-2 bg-gray-700 text-gray-300 rounded-md border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            placeholder="List any courses you have completed..."
+                        ></textarea>
+                    </div>
+
                     {/* Current Skillset */}
                     <div className="mb-4">
                         <label className="text-gray-300 block mb-2">
                             Your current skillset
                         </label>
                         <textarea
-                            rows="4"
+                            rows="3"
                             value={skillset}
                             onChange={(e) => setSkillset(e.target.value)}
                             className="w-full px-4 py-2 bg-gray-700 text-gray-300 rounded-md border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
                             placeholder="Describe your current skills..."
+                        ></textarea>
+                    </div>
+
+                    {/* Future Goal (Optional) */}
+                    <div className="mb-4">
+                        <label className="text-gray-300 block mb-2">
+                            Your future goal (optional)
+                        </label>
+                        <textarea
+                            rows="3"
+                            value={futureGoal}
+                            onChange={(e) => setFutureGoal(e.target.value)}
+                            className="w-full px-4 py-2 bg-gray-700 text-gray-300 rounded-md border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            placeholder="Share your future goals (optional)..."
                         ></textarea>
                     </div>
 
