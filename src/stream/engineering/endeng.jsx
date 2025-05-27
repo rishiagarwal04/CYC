@@ -1,6 +1,6 @@
 import React from "react";
 
-const endeng = () => {
+const Endeng = () => {
   return (
     <div className="text-gray-900 font-sans mt-12 bg-purple-200 pt-6 m-4 rounded-xl pb-4">
       <h1 className="text-center text-purple-800 text-3xl font-semibold mb-12">
@@ -125,4 +125,4 @@ const endeng = () => {
   );
 };
 
-export default endeng;
+export default Endeng;

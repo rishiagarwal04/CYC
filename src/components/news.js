@@ -1,54 +1,8 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from "react";
 
 const News = () => {
   const containerRef = useRef(null);
   const [repeatedNewsItems, setRepeatedNewsItems] = useState([]);
-
-  useEffect(() => {
-    const scrollContainer = containerRef.current;
-
-    let scrollStep = 1; // Speed of scrolling
-    let scrollInterval = null;
-
-    // Function to duplicate news items to fill the container
-    const fillContainerWithNews = () => {
-      if (!scrollContainer) return;
-
-      const containerHeight = scrollContainer.clientHeight;
-      const itemHeight = scrollContainer.scrollHeight / newsItems.length;
-      const numItemsToFill = Math.ceil(containerHeight / itemHeight);
-
-      const repeatedNews = [];
-      for (let i = 0; i < numItemsToFill; i++) {
-        repeatedNews.push(...newsItems);
-      }
-
-      setRepeatedNewsItems(repeatedNews);
-    };
-
-    // Start auto-scrolling from bottom to top
-    const startScrolling = () => {
-      if (scrollContainer) {
-        scrollContainer.scrollTop = scrollContainer.scrollHeight; // Start from the bottom
-        scrollInterval = setInterval(() => {
-          if (
-            scrollContainer.scrollTop <= 0
-          ) {
-            scrollContainer.scrollTop = scrollContainer.scrollHeight; // Loop back to the bottom
-          } else {
-            scrollContainer.scrollTop -= scrollStep; // Scroll up
-          }
-        },0); // Adjust interval time for smoothness
-      }
-    };
-
-    fillContainerWithNews();
-    startScrolling();
-
-    return () => {
-      if (scrollInterval) clearInterval(scrollInterval); // Cleanup on unmount
-    };
-  }, []);
 
   const newsItems = [
     {
@@ -88,6 +42,54 @@ const News = () => {
     },
   ];
 
+  useEffect(() => {
+    const scrollContainer = containerRef.current;
+
+    let scrollStep = 1;
+    let scrollInterval = null;
+
+    const fillContainerWithNews = () => {
+      if (!scrollContainer) return;
+
+      const containerHeight = scrollContainer.clientHeight;
+      const itemHeight = scrollContainer.scrollHeight / newsItems.length;
+      const numItemsToFill = Math.ceil(containerHeight / itemHeight) + 5; // +5 ensures looping buffer
+
+      const repeatedNews = [];
+      for (let i = 0; i < numItemsToFill; i++) {
+        repeatedNews.push(...newsItems);
+      }
+
+      setRepeatedNewsItems(repeatedNews);
+    };
+
+    const startScrolling = () => {
+      scrollInterval = setInterval(() => {
+        if (!scrollContainer) return;
+
+        // If we reach the bottom, reset to top
+        if (
+          scrollContainer.scrollTop + scrollContainer.clientHeight >=
+          scrollContainer.scrollHeight
+        ) {
+          scrollContainer.scrollTop = 0;
+        } else {
+          scrollContainer.scrollTop += scrollStep;
+        }
+      }, 20); // Adjust speed here
+    };
+
+    fillContainerWithNews();
+    const timeout = setTimeout(() => {
+      startScrolling();
+    }, 300); // Allow DOM to render before starting scroll
+
+    return () => {
+      clearInterval(scrollInterval);
+      clearTimeout(timeout);
+    };
+  }, []);
+
   return (
     <>
       <div className="h-14 font-bold text-center py-2 text-white rounded-lg bg-[#8b65ab]">
@@ -112,6 +114,8 @@ const News = () => {
             <a
               href={news.link}
               className="text-blue-500 text-sm underline hover:text-red-700"
+              target="_blank"
+              rel="noopener noreferrer"
             >
               Read More
             </a>

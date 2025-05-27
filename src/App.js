@@ -18,28 +18,28 @@
 // // //     },
 // // //     {
 // // //       path: '/questions/:id',
-// // //       element: <QuestionDetail />, 
-// // //       errorElement: <div>Page not found!</div>,  
+// // //       element: <QuestionDetail />,
+// // //       errorElement: <div>Page not found!</div>,
 // // //     },
 // // //     {
 // // //       path: '/signup',
-// // //       element: <Signup />, 
-// // //       errorElement: <div>Page not found!</div>,  
+// // //       element: <Signup />,
+// // //       errorElement: <div>Page not found!</div>,
 // // //     },
 // // //     {
 // // //       path: '/signin',
-// // //       element: <Signin />, 
-// // //       errorElement: <div>Page not found!</div>,  
+// // //       element: <Signin />,
+// // //       errorElement: <div>Page not found!</div>,
 // // //     },
 // // //     {
 // // //       path: '/personalizeform',
-// // //       element: <PersonalizeForm />, 
-// // //       errorElement: <div>Page not found!</div>,  
+// // //       element: <PersonalizeForm />,
+// // //       errorElement: <div>Page not found!</div>,
 // // //     },
 // // //     {
 // // //       path: '/explore',
-// // //       element: <CareerPathFlowchart />, 
-// // //       errorElement: <div>Page not found!</div>,  
+// // //       element: <CareerPathFlowchart />,
+// // //       errorElement: <div>Page not found!</div>,
 // // //     },
 // // //   ]);
 
@@ -56,7 +56,7 @@
 // // // import Copil from './pages/copil';
 // // // import RoadmapEng from './stream/engineering/roadmapEng';
 // // // import StartPage from './stream/engineering/starteng';
-// // // import Milestone1Page from './stream/engineering/milestone1eng';  
+// // // import Milestone1Page from './stream/engineering/milestone1eng';
 // // // import Milestone2Page from './stream/engineering/milestone2eng';
 // // // import Milestone3Page from './stream/engineering/milestone3eng';
 // // // import EndPage from './stream/engineering/endeng';
@@ -66,7 +66,7 @@
 // // //     <Router>
 // // //       {/* Navbar appears on all pages */}
 // // //       <Navbar />
-      
+
 // // //       <Routes>
 // // //         {/* Define routes for each page */}
 // // //         <Route path="/" element={<Landing />} />
@@ -84,7 +84,7 @@
 // // //         {/* Fallback route */}
 // // //         <Route path="*" element={<Landing />} />
 // // //       </Routes>
-      
+
 // // //       {/* Footer can be added globally */}
 // // //       {/* <Footer /> */}
 // // //     </Router>
@@ -141,55 +141,55 @@
 // //     },
 // //     {
 // //       path: '/questions/:id',
-// //       element: <QuestionDetail />, 
-// //       errorElement: <div>Page not found!</div>,  
+// //       element: <QuestionDetail />,
+// //       errorElement: <div>Page not found!</div>,
 // //     },
 // //     {
 // //       path: '/signup',
-// //       element: <Signup />, 
-// //       errorElement: <div>Page not found!</div>,  
+// //       element: <Signup />,
+// //       errorElement: <div>Page not found!</div>,
 // //     },
 // //     {
 // //       path: '/signin',
-// //       element: <Signin />, 
-// //       errorElement: <div>Page not found!</div>,  
+// //       element: <Signin />,
+// //       errorElement: <div>Page not found!</div>,
 // //     },
 // //     {
 // //       path: '/explore/engineer/nine10',
-// //       element: <E910 />, 
-// //       errorElement: <div>Page not found!</div>,  
+// //       element: <E910 />,
+// //       errorElement: <div>Page not found!</div>,
 // //     },
 // //     {
 // //       path: '/explore/engineer/eleven12',
-// //       element: <E1112 />, 
-// //       errorElement: <div>Page not found!</div>,  
+// //       element: <E1112 />,
+// //       errorElement: <div>Page not found!</div>,
 // //     },
 // //     {
 // //       path: '/explore/engineer/college',
-// //       element: <CollegeTable />, 
-// //       errorElement: <div>Page not found!</div>,  
+// //       element: <CollegeTable />,
+// //       errorElement: <div>Page not found!</div>,
 // //     },
 // //     {
 // //       path: '/explore/engineer/markettrends',
-// //       element: <EngineeringData />, 
-// //       errorElement: <div>Page not found!</div>,  
+// //       element: <EngineeringData />,
+// //       errorElement: <div>Page not found!</div>,
 // //     },
 // //     {
 // //       path: '/explore/engineer/specialization',
-// //       element: <CareerOptions />, 
-// //       errorElement: <div>Page not found!</div>,  
+// //       element: <CareerOptions />,
+// //       errorElement: <div>Page not found!</div>,
 // //     },
 // //     // {
 // //     //   path: '/explore/cooking/nine10',
-// //     //   element: <C910 />, 
-// //     //   errorElement: <div>Page not found!</div>,  
+// //     //   element: <C910 />,
+// //     //   errorElement: <div>Page not found!</div>,
 // //     // },
 // //     // {
 // //     //   path: '/explore/cooking/eleven12',
-// //     //   element: <C1112 />, 
-// //     //   errorElement: <div>Page not found!</div>,  
+// //     //   element: <C1112 />,
+// //     //   errorElement: <div>Page not found!</div>,
 // //     // },
-    
+
 // //   ]);
 // // >>>>>>> origin/sachin3
 
@@ -198,7 +198,7 @@
 // //     <Router>
 // //       {/* Navbar appears on all pages<div className=' w-full  absolute  '>
 // //       <Navbar /></div>*/}
-// //       <div className=''> 
+// //       <div className=''>
 
 // //       <Routes>
 // //         {/* Define routes for main and additional pages */}
@@ -232,7 +232,6 @@
 // // }
 
 // // export default App;
-
 
 // import './App.css';
 // import React from 'react';
@@ -294,91 +293,158 @@
 
 // export default App;
 
-import './App.css';
+import "./App.css";
 
-import Landing from './pages/landing';
-import Navbar from './components/navbar';
-import { createBrowserRouter, RouterProvider } from 'react-router-dom';
-import QuestionDetail from './components/QuoraComponents/QandA';
-import Signup from './components/SignUp';
-import Signin from './components/SignIn';
-import Chat from './pages/chat';
- import One_two from './pages/one_two';
-
-import E910 from './Data/Engineer/ninthAnd10/Main';
-import E1112 from './Data/Engineer/eleven12/Main';
-import CollegeTable from './Data/Engineer/College';
-import EngineeringData from './Data/Engineer/MarketTrends';
-import CareerOptions from './Data/Engineer/Specializations';
-import PersonalizeForm from './components/PersonalizeForm';
+import Landing from "./pages/landing";
+import Navbar from "./components/navbar";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import QuestionDetail from "./components/QuoraComponents/QandA";
+import Signup from "./components/SignUp";
+import Signin from "./components/SignIn";
+import Chat from "./pages/chat";
+import One_two from "./pages/one_two";
+import Endeng from "./stream/engineering/endeng";
+import E910 from "./Data/Engineer/ninthAnd10/Main";
+import E1112 from "./Data/Engineer/eleven12/Main";
+import CollegeTable from "./Data/Engineer/College";
+import EngineeringData from "./Data/Engineer/MarketTrends";
+import CareerOptions from "./Data/Engineer/Specializations";
+import PersonalizeForm from "./components/PersonalizeForm";
+import Highscool from "./pages/highscool";
 // import C910 from './Data/Cooking/C910';
 // import C1112 from './Data/Cooking/eleven12';
 function App() {
   const router = createBrowserRouter([
+    // {
+    //   path: "/landing",
+    //   element: (
+    //     <div>
+    //       {" "}
+    //       <Navbar />
+    //       <Landing />
+    //     </div>
+    //   ),
+    // },
     {
-      path: '/',
-      element:  <div> <Navbar/><Landing /></div> ,
+      path: "/explore",
+      element: (
+        <div>
+          {" "}
+          <Navbar />
+          <Landing />
+        </div>
+      ),
     },
     {
-      path: '/explore',
-      element:  <div> <Navbar/><Landing /></div> ,
+      path: "/questions/:id",
+      element: (
+        <div>
+          <Navbar /> <QuestionDetail />
+        </div>
+      ),
+      errorElement: <div>Page not found!</div>,
     },
     {
-      path: '/questions/:id',
-      element: <div><Navbar/> <QuestionDetail /></div>, 
-      errorElement: <div>Page not found!</div>,  
+      path: "/personalize/:id",
+      element: (
+        <div>
+          {" "}
+          <PersonalizeForm />
+        </div>
+      ),
+      errorElement: <div>Page not found!</div>,
     },
     {
-      path: '/personalize/:id',
-      element: <div> <PersonalizeForm /></div>, 
-      errorElement: <div>Page not found!</div>,  
+      path: "/signup",
+      element: <Signup />,
+      errorElement: <div>Page not found!</div>,
     },
     {
-      path: '/signup',
-      element: <Signup />, 
-      errorElement: <div>Page not found!</div>,  
+      path: "/",
+      element: <Signin />,
+      errorElement: <div>Page not found!</div>,
     },
     {
-      path: '/signin',
-      element: <Signin />, 
-      errorElement: <div>Page not found!</div>,  
+      path: "/chat",
+      element: (
+        <div>
+          <Navbar /> <Chat />
+        </div>
+      ),
+      errorElement: <div>Page not found!</div>,
     },
     {
-      path: '/chat',
-      element: <div><Navbar/> <Chat /></div>,
-      errorElement: <div>Page not found!</div>,  
+      path: "/1-2-1",
+      element: (
+        <div>
+          <Navbar /> <One_two />
+        </div>
+      ),
+      errorElement: <div>Page not found!</div>,
     },
     {
-      path: '/1-2-1',
-      element:<div><Navbar/> <One_two /></div>,
-      errorElement: <div>Page not found!</div>,  
+      path: "/explore/roadmap/endeng",
+      element: (
+        <div>
+          <Navbar /> <Endeng />
+        </div>
+      ),
+      errorElement: <div>Page not found!</div>,
     },
     {
-      path: '/explore/engineer/nine10',
-      element:<div><Navbar/> <E910 /></div>, 
-      errorElement: <div>Page not found!</div>,  
+      path: "explore/engineer/nine10",
+      element: (
+        <div>
+          <Navbar /> <E910 />
+        </div>
+      ),
+      errorElement: <div>Page not found!</div>,
     },
     {
-      path: '/explore/engineer/eleven12',
-      element: <div><Navbar/> <E1112 /></div>, 
-      errorElement: <div>Page not found!</div>,  
+      path: "explore/engineer/highschool",
+      element: (
+        <div>
+          <Navbar /> <Highscool />
+        </div>
+      ),
+      errorElement: <div>Page not found!</div>,
     },
     {
-      path: '/explore/engineer/college',
-      element: <div><Navbar/> <CollegeTable /></div>, 
-      errorElement: <div>Page not found!</div>,  
+      path: "/explore/engineer/eleven12",
+      element: (
+        <div>
+          <Navbar /> <E1112 />
+        </div>
+      ),
+      errorElement: <div>Page not found!</div>,
     },
     {
-      path: '/explore/engineer/markettrends',
-      element: <div><Navbar/> <EngineeringData /></div>, 
-      errorElement: <div>Page not found!</div>,  
+      path: "/explore/engineer/college",
+      element: (
+        <div>
+          <Navbar /> <CollegeTable />
+        </div>
+      ),
+      errorElement: <div>Page not found!</div>,
     },
     {
-      path: '/explore/engineer/specializations',
-      element: <div><Navbar/> <CareerOptions /></div>, 
-      errorElement: <div>Page not found!</div>,  
+      path: "/explore/engineer/markettrends",
+      element: (
+        <div>
+          <Navbar /> <EngineeringData />
+        </div>
+      ),
+      errorElement: <div>Page not found!</div>,
     },
-    
+    {
+      path: "/explore/engineer/specializations",
+      element: (
+        <div>
+          <Navbar /> <CareerOptions />
+        </div>
+      ),
+      errorElement: <div>Page not found!</div>,
+    },
   ]);
 
   return (
@@ -388,4 +454,4 @@ function App() {
   );
 }
 
-export default App;
+export default App;

@@ -4,331 +4,437 @@ import axios from "axios";
 import Logo from "./LOGO.png";
 
 const Navbar = () => {
-    const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-    const [userData, setUserData] = useState(null);
-    const [editData, setEditData] = useState(null);
-    const [isEditing, setIsEditing] = useState(false);
-    const [error, setError] = useState("");
-    const [isLoading, setIsLoading] = useState(false);
-    const navigate = useNavigate();
-    const isLoggedIn = !!localStorage.getItem("userId");
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [userData, setUserData] = useState(null);
+  const [skillData, setSkillData] = useState(null);
+  const [editData, setEditData] = useState(null);
+  const [isEditing, setIsEditing] = useState(false);
+  const [error, setError] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [careerRecommendation, setCareerRecommendation] = useState(null);
+  const [isRecommendationLoading, setIsRecommendationLoading] = useState(false);
+  const navigate = useNavigate();
+  const isLoggedIn = !!localStorage.getItem("userId");
 
-    // Toggle sidebar
-    const toggleSidebar = () => {
-        setIsSidebarOpen(!isSidebarOpen);
-        if (isEditing) setIsEditing(false); // Exit edit mode when closing
-    };
+  // Toggle sidebar
+  const toggleSidebar = () => {
+    setIsSidebarOpen(!isSidebarOpen);
+    if (isEditing) setIsEditing(false);
+  };
 
-    // Fetch user data
-    useEffect(() => {
-        const fetchUserData = async () => {
-            const userId = localStorage.getItem("userId");
-            if (userId) {
-                setIsLoading(true);
-                try {
-                    const response = await axios.get(`http://localhost:5000/signup/user/${userId}`);
-                    setUserData(response.data.user);
-                    setEditData(response.data.user); // Initialize edit form
-                    setError("");
-                } catch (err) {
-                    console.error("Error fetching user data:", err.response || err.message);
-                    setError(err.response?.data?.message || "Failed to load user data.");
-                } finally {
-                    setIsLoading(false);
-                }
-            }
-        };
-        fetchUserData();
-    }, []);
-
-    // Handle edit form changes
-    const handleEditChange = (e) => {
-        const { name, value } = e.target;
-        // if (name.startsWith("birthday.")) {
-        //     const field = name.split(".")[1];
-        //     setEditData({ ...editData, birthday: { ...editData.birthday, [field]: value } });
-        
-            setEditData({ ...editData, [name]: value });
-    };
-
-    // Validate form data
-    const validateForm = () => {
-        if (!editData.username) return "Username is required.";
-        // if (!editData.birthday.month || !editData.birthday.day) return "Birthday is required.";
-        if (!editData.gender) return "Gender is required.";
-        if (!editData.qualification) return "Qualification is required.";
-        if (!editData.contact) return "Contact is required.";
-        // if (editData.birthday.month < 1 || editData.birthday.month > 12) return "Month must be 01-12.";
-        // if (editData.birthday.day < 1 || editData.birthday.day > 31) return "Day must be 01-31.";
-        return "";
-    };
-
-    // Save edited data
-    const handleSave = async () => {
-        const validationError = validateForm();
-        if (validationError) {
-            setError(validationError);
-            return;
-        }
-
+  // Fetch user data
+  useEffect(() => {
+    const fetchUserData = async () => {
+      const userId = localStorage.getItem("userId");
+      if (userId) {
+        setIsLoading(true);
         try {
-            const userId = localStorage.getItem("userId");
-            const response = await axios.put(`http://localhost:5000/signup/user/${userId}`, editData);
-            setUserData(response.data.user);
-            setEditData(response.data.user);
-            setIsEditing(false);
-            setError("");
+          const [response1, response2] = await Promise.all([
+            axios.get(`http://localhost:5000/signup/user/${userId}`),
+            axios.get(`http://localhost:5000/signup/skills/${userId}`),
+          ]);
+          setUserData(response1.data.user);
+          setSkillData({
+            interest: response2.data.skill.interest,
+            courses_done: response2.data.skill.courses_done,
+            current_skillset: response2.data.skill.current_skillset,
+            your_future_goal: response2.data.skill.your_future_goal,
+            qualification: response1.data.user.qualification, // Fixed typo
+          });
+          setEditData(response1.data.user);
+          setError("");
         } catch (err) {
-            console.error("Error saving user data:", err.response || err.message);
-            setError(err.response?.data?.message || "Failed to save user data.");
+          console.error(
+            "Error fetching user data:",
+            err.response || err.message
+          );
+          setError(err.response?.data?.message || "Failed to load user data.");
+        } finally {
+          setIsLoading(false);
         }
+      }
     };
+    fetchUserData();
+  }, []);
 
-    // Handle logout
-    const handleLogout = () => {
-        localStorage.removeItem("userId");
-        setUserData(null);
-        setEditData(null);
-        setIsSidebarOpen(false);
-        navigate("/signin");
-    };
+  // Fetch career recommendation
+  const fetchCareerRecommendation = async () => {
+    const userId = localStorage.getItem("userId");
+    console.log("skillData : ", skillData);
+    if (userId && skillData && !isEditing) {
+      setIsRecommendationLoading(true);
+      try {
+        const response = await axios.post(
+          `http://localhost:8000/recommend/career`,
+          skillData,
+          { headers: { "Content-Type": "application/json" } }
+        );
+        setCareerRecommendation(
+          response.data.career_path || "No recommendation available"
+        );
+        setError("");
+      } catch (err) {
+        console.error(
+          "Error fetching career recommendation:",
+          err.response || err.message
+        );
+        setError(
+          err.response?.data?.message || "Failed to load career recommendation."
+        );
+      } finally {
+        setIsRecommendationLoading(false);
+      }
+    }
+  };
 
-    return (
-        <>
-            {/* Navbar */}
-            <div className="text-xl z-20 px-4 py-3 h-20 flex flex-row justify-between items-center bg-[#8b65ab] w-full text-white fixed top-0 left-0">
-                <div className="left text-2xl font-bold">
-                    <ul className="flex flex-row space-x-8 pt-2">
-                        <li>
-                            <Link to="/" className="hover:underline">
-                                Home
-                            </Link>
-                        </li>
-                        <li>
-                            <Link to="/explore" className="hover:underline">
-                                Explore
-                            </Link>
-                        </li>
-                        <li>
-                            <Link to="/1-2-1" className="hover:underline">
-                                1-2-1
-                            </Link>
-                        </li>
-                        <li>
-                            <Link to="/chat" className="hover:underline">
-                                Chat
-                            </Link>
-                        </li>
-                    </ul>
-                </div>
-                <div className="right flex items-center space-x-4">
-                    <img src={Logo} alt="Logo" className="h-20 w-auto object-contain" />
-                    {isLoggedIn && (
-                        <button
-                            onClick={toggleSidebar}
-                            className="text-white hover:bg-[#7a5a9a] p-2 rounded-md focus:outline-none"
-                        >
-                            <svg
-                                className="w-6 h-6"
-                                fill="none"
-                                stroke="currentColor"
-                                viewBox="0 0 24 24"
-                                xmlns="http://www.w3.org/2000/svg"
-                            >
-                                <path
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                    strokeWidth="2"
-                                    d="M4 6h16M4 12h16m-7 6h7"
-                                />
-                            </svg>
-                        </button>
-                    )}
-                </div>
-            </div>
+  useEffect(() => {
+    fetchCareerRecommendation();
+  }, [userData, isEditing]);
 
-            {/* Sidebar */}
+  // Handle edit form changes
+  const handleEditChange = (e) => {
+    const { name, value } = e.target;
+    setEditData({ ...editData, [name]: value });
+  };
+
+  // Validate form
+  const validateForm = () => {
+    if (!editData?.username) return "Username is required.";
+    if (!editData?.gender) return "Gender is required.";
+    if (!editData?.qualification) return "Qualification is required.";
+    if (!editData?.contact) return "Contact is required.";
+    return "";
+  };
+
+  // Save edited data
+  const handleSave = async () => {
+    const validationError = validateForm();
+    if (validationError) {
+      setError(validationError);
+      return;
+    }
+    try {
+      const userId = localStorage.getItem("userId");
+      const response = await axios.put(
+        `http://localhost:5000/signup/user/${userId}`,
+        editData
+      );
+      setUserData(response.data.user);
+      setEditData(response.data.user);
+      setIsEditing(false);
+      setError("");
+      fetchCareerRecommendation();
+    } catch (err) {
+      console.error("Error saving user data:", err.response || err.message);
+      setError(err.response?.data?.message || "Failed to save user data.");
+    }
+  };
+
+  // Handle logout
+  const handleLogout = () => {
+    localStorage.removeItem("userId");
+    setUserData(null);
+    setEditData(null);
+    setCareerRecommendation(null);
+    setIsSidebarOpen(false);
+    navigate("/signin");
+  };
+
+  return (
+    <>
+      {/* Navbar */}
+      <nav className="fixed top-0 left-0 w-full bg-gradient-to-r from-[#8b65ab] to-[#7a5a9a] shadow-lg z-50">
+        <div className="container mx-auto px-4 py-3 flex justify-between items-center">
+          <div className="flex items-center space-x-8">
+            <Link to="/" className="flex items-center">
+              <img
+                src={Logo}
+                alt="Logo"
+                className="h-12 w-auto transform hover:scale-105 transition-transform duration-300"
+              />
+            </Link>
+            <ul className="hidden md:flex space-x-6 text-white text-lg font-medium">
+              {["Home", "Explore", "1-2-1", "Chat"].map((item) => (
+                <li key={item}>
+                  <Link
+                    to={item === "Home" ? "/" : `/${item.toLowerCase()}`}
+                    className="relative group px-2 py-1 hover:text-[#ffce56] transition-colors duration-200"
+                  >
+                    {item}
+                    <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-[#ffce56] group-hover:w-full transition-all duration-300"></span>
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+          <div className="flex items-center space-x-4">
             {isLoggedIn && (
-                <div
-                    className={`fixed top-0 right-0 h-full w-80 bg-[#8b65ab] text-white p-8 z-30 transform transition-transform duration-300 overflow-y-auto ${
-                        isSidebarOpen ? "translate-x-0" : "translate-x-full"
-                    }`}
+              <button
+                onClick={toggleSidebar}
+                className="text-white hover:bg-[#6a4a8a] p-2 rounded-full focus:outline-none transition-colors duration-200"
+                aria-label="Toggle Sidebar"
+              >
+                <svg
+                  className="w-6 h-6"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
                 >
-                    <button
-                        onClick={toggleSidebar}
-                        className="absolute top-4 right-4 text-white hover:text-gray-300"
-                    >
-                        <svg
-                            className="w-6 h-6"
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
-                            xmlns="http://www.w3.org/2000/svg"
-                        >
-                            <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth="2"
-                                d="M6 18L18 6M6 6l12 12"
-                            />
-                        </svg>
-                    </button>
-                    <h2 className="text-2xl font-bold mb-6">Your Profile</h2>
-                    {error && <p className="text-red-300 mb-4">{error}</p>}
-                    {isLoading ? (
-                        <p>Loading user data...</p>
-                    ) : userData ? (
-                        <div className="space-y-4">
-                            {isEditing ? (
-                                <>
-                                    <div>
-                                        <h3 className="text-lg font-semibold">Username</h3>
-                                        <input
-                                            type="text"
-                                            name="username"
-                                            value={editData.username || ""}
-                                            onChange={handleEditChange}
-                                            className="w-full p-2 bg-gray-700 text-white rounded-md"
-                                            required
-                                        />
-                                    </div>
-                                    {/* <div>
-                                        {/* <h3 className="text-lg font-semibold">Birthday</h3>
-                                        <div className="flex space-x-2">
-                                            <input
-                                                type="date"
-                                                name="birthday"
-                                                value={editData.birthday.month || ""}
-                                                onChange={handleEditChange}
-                                                placeholder="MM"
-                                                className="w-1/2 p-2 bg-gray-700 text-white rounded-md"
-                                                maxLength="2"
-                                                required
-                                            />
-                                            <input
-                                                type="text"
-                                                name="birthday.day"
-                                                value={editData.birthday.day || ""}
-                                                onChange={handleEditChange}
-                                                placeholder="DD"
-                                                className="w-1/2 p-2 bg-gray-700 text-white rounded-md"
-                                                maxLength="2"
-                                                required
-                                            />
-                                            <input
-                                                type="text"
-                                                name="birthday.year"
-                                                value={editData.birthday.year || ""}
-                                                onChange={handleEditChange}
-                                                placeholder="YYYY"
-                                                className="w-1/2 p-2 bg-gray-700 text-white rounded-md"
-                                                maxLength="2"
-                                                required
-                                            />
-                                        </div> */}
-                                    {/* </div> */} 
-                                    <div>
-                                        <h3 className="text-lg font-semibold">Gender</h3>
-                                        <select
-                                            name="gender"
-                                            value={editData.gender || ""}
-                                            onChange={handleEditChange}
-                                            className="w-full p-2 bg-gray-700 text-white rounded-md"
-                                            required
-                                        >
-                                            <option value="">Select</option>
-                                            <option value="Male">Male</option>
-                                            <option value="Female">Female</option>
-                                            <option value="Other">Other</option>
-                                        </select>
-                                    </div>
-                                    <div>
-                                        <h3 className="text-lg font-semibold">Qualification</h3>
-                                        <input
-                                            type="text"
-                                            name="qualification"
-                                            value={editData.qualification || ""}
-                                            onChange={handleEditChange}
-                                            className="w-full p-2 bg-gray-700 text-white rounded-md"
-                                            required
-                                        />
-                                    </div>
-                                    <div>
-                                        <h3 className="text-lg font-semibold">Contact</h3>
-                                        <input
-                                            type="text"
-                                            name="contact"
-                                            value={editData.contact || ""}
-                                            onChange={handleEditChange}
-                                            className="w-full p-2 bg-gray-700 text-white rounded-md"
-                                            required
-                                        />
-                                    </div>
-                                    <div className="flex space-x-2 mt-4">
-                                        <button
-                                            onClick={handleSave}
-                                            className="w-1/2 bg-green-500 hover:bg-green-600 text-white py-2 rounded-md"
-                                        >
-                                            Save
-                                        </button>
-                                        <button
-                                            onClick={() => {
-                                                setIsEditing(false);
-                                                setEditData(userData); // Reset to original data
-                                                setError("");
-                                            }}
-                                            className="w-1/2 bg-gray-500 hover:bg-gray-600 text-white py-2 rounded-md"
-                                        >
-                                            Cancel
-                                        </button>
-                                    </div>
-                                </>
-                            ) : (
-                                <>
-                                    <div>
-                                        <h3 className="text-lg font-semibold">Username</h3>
-                                        <p>{userData.username || "N/A"}</p>
-                                    </div>
-                                    {/* <div>
-                                        <h3 className="text-lg font-semibold">Birthday</h3>
-                                        <p>
-                                            {/* {userData.birthday} */}
-                                        {/* </p>
-                                    </div> */} 
-                                    <div>
-                                        <h3 className="text-lg font-semibold">Gender</h3>
-                                        <p>{userData.gender || "N/A"}</p>
-                                    </div>
-                                    <div>
-                                        <h3 className="text-lg font-semibold">Qualification</h3>
-                                        <p>{userData.qualification || "N/A"}</p>
-                                    </div>
-                                    <div>
-                                        <h3 className="text-lg font-semibold">Contact</h3>
-                                        <p>{userData.contact || "N/A"}</p>
-                                    </div>
-                                    <button
-                                        onClick={() => setIsEditing(true)}
-                                        className="w-full bg-blue-500 hover:bg-blue-600 text-white py-2 rounded-md mt-4"
-                                    >
-                                        Edit Profile
-                                    </button>
-                                </>
-                            )}
-                            <button
-                                onClick={handleLogout}
-                                className="w-full bg-red-500 hover:bg-red-600 text-white py-2 rounded-md mt-4"
-                            >
-                                Logout
-                            </button>
-                        </div>
-                    ) : (
-                        <p>No user data available.</p>
-                    )}
-                </div>
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M4 6h16M4 12h16m-7 6h7"
+                  />
+                </svg>
+              </button>
             )}
-        </>
-    );
+            {!isLoggedIn && (
+              <Link
+                to="/signin"
+                className="text-white bg-[#4bc0c0] hover:bg-[#3aa0a0] px-4 py-2 rounded-md text-sm font-medium transition-colors duration-200"
+              >
+                Sign In
+              </Link>
+            )}
+          </div>
+        </div>
+        {/* Mobile Menu */}
+        <div className="md:hidden bg-[#8b65ab] px-4 py-2">
+          <ul className="flex flex-col space-y-2 text-white text-lg font-medium">
+            {["Home", "Explore", "1-2-1", "Chat"].map((item) => (
+              <li key={item}>
+                <Link
+                  to={item === "Home" ? "/" : `/${item.toLowerCase()}`}
+                  className="block px-2 py-1 hover:text-[#ffce56] transition-colors duration-200"
+                >
+                  {item}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </nav>
+
+      {/* Sidebar */}
+      {isLoggedIn && (
+        <div
+          className={`fixed top-0 right-0 h-full w-80 bg-[#8b65ab]/90 backdrop-blur-md text-white p-6 z-50 transform transition-transform duration-500 ease-in-out overflow-y-auto shadow-2xl ${
+            isSidebarOpen ? "translate-x-0" : "translate-x-full"
+          }`}
+        >
+          <button
+            onClick={toggleSidebar}
+            className="absolute top-4 right-4 text-white hover:text-[#ffce56] focus:outline-none"
+            aria-label="Close Sidebar"
+          >
+            <svg
+              className="w-6 h-6"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M6 18L18 6M6 6l12 12"
+              />
+            </svg>
+          </button>
+          <h2 className="text-2xl font-bold mb-6 text-[#ffce56] tracking-wide">
+            Your Profile
+          </h2>
+          {error && (
+            <p className="text-red-300 bg-red-500/20 p-2 rounded-md mb-4 animate-pulse">
+              {error}
+            </p>
+          )}
+          {isLoading ? (
+            <div className="flex justify-center items-center h-40">
+              <div className="w-8 h-8 border-4 border-[#ffce56] border-t-transparent rounded-full animate-spin"></div>
+            </div>
+          ) : userData ? (
+            <div className="space-y-4 bg-white/10 p-4 rounded-xl shadow-inner">
+              {isEditing ? (
+                <>
+                  <div>
+                    <label className="block text-sm font-medium mb-1">
+                      Username
+                    </label>
+                    <input
+                      type="text"
+                      name="username"
+                      value={editData?.username || ""}
+                      onChange={handleEditChange}
+                      className="w-full p-2 bg-[#6a4a8a]/50 text-white rounded-md focus:ring-2 focus:ring-[#ffce56] focus:outline-none transition-all duration-200"
+                      required
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium mb-1">
+                      Gender
+                    </label>
+                    <select
+                      name="gender"
+                      value={editData?.gender || ""}
+                      onChange={handleEditChange}
+                      className="w-full p-2 bg-[#6a4a8a]/50 text-white rounded-md focus:ring-2 focus:ring-[#ffce56] focus:outline-none transition-all duration-200"
+                      required
+                    >
+                      <option value="">Select</option>
+                      <option value="Male">Male</option>
+                      <option value="Female">Female</option>
+                      <option value="Other">Other</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium mb-1">
+                      Qualification
+                    </label>
+                    <input
+                      type="text"
+                      name="qualification"
+                      value={editData?.qualification || ""}
+                      onChange={handleEditChange}
+                      className="w-full p-2 bg-[#6a4a8a]/50 text-white rounded-md focus:ring-2 focus:ring-[#ffce56] focus:outline-none transition-all duration-200"
+                      required
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium mb-1">
+                      Contact
+                    </label>
+                    <input
+                      type="text"
+                      name="contact"
+                      value={editData?.contact || ""}
+                      onChange={handleEditChange}
+                      className="w-full p-2 bg-[#6a4a8a]/50 text-white rounded-md focus:ring-2 focus:ring-[#ffce56] focus:outline-none transition-all duration-200"
+                      required
+                    />
+                  </div>
+                  <div className="flex space-x-2 mt-4">
+                    <button
+                      onClick={handleSave}
+                      className="w-1/2 bg-[#4bc0c0] hover:bg-[#3aa0a0] text-white py-2 rounded-md font-medium transition-colors duration-200"
+                    >
+                      Save
+                    </button>
+                    <button
+                      onClick={() => {
+                        setIsEditing(false);
+                        setEditData(userData);
+                        setError("");
+                      }}
+                      className="w-1/2 bg-gray-600 hover:bg-gray-700 text-white py-2 rounded-md font-medium transition-colors duration-200"
+                    >
+                      Cancel
+                    </button>
+                  </div>
+                </>
+              ) : (
+                <>
+                  <div>
+                    <h3 className="text-sm font-semibold text-[#ffce56] mb-1">
+                      Username
+                    </h3>
+                    <p className="text-white">{userData.username || "N/A"}</p>
+                  </div>
+                  <div>
+                    <h3 className="text-sm font-semibold text-[#ffce56] mb-1">
+                      Gender
+                    </h3>
+                    <p className="text-white">{userData.gender || "N/A"}</p>
+                  </div>
+                  <div>
+                    <h3 className="text-sm font-semibold text-[#ffce56] mb-1">
+                      Qualification
+                    </h3>
+                    <p className="text-white">
+                      {userData.qualification || "N/A"}
+                    </p>
+                  </div>
+                  <div>
+                    <h3 className="text-sm font-semibold text-[#ffce56] mb-1">
+                      Contact
+                    </h3>
+                    <p className="text-white">{userData.contact || "N/A"}</p>
+                  </div>
+                  <div>
+                    <h3 className="text-sm font-semibold text-[#ffce56] mb-1">
+                      Career Recommendation
+                    </h3>
+                    {isRecommendationLoading ? (
+                      <p className="text-gray-300 animate-pulse flex items-center">
+                        <svg
+                          className="w-4 h-4 mr-2 animate-spin"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                        >
+                          <circle
+                            className="opacity-25"
+                            cx="12"
+                            cy="12"
+                            r="10"
+                            stroke="currentColor"
+                            strokeWidth="4"
+                          ></circle>
+                          <path
+                            className="opacity-75"
+                            fill="currentColor"
+                            d="M4 12a8 8 0 018-8v8h8a8 8 0 11-16 0z"
+                          ></path>
+                        </svg>
+                        Fetching...
+                      </p>
+                    ) : (
+                      <p className="text-[#ffce56] font-medium bg-[#6a4a8a]/50 p-2 rounded-md flex items-center">
+                        <svg
+                          className="w-5 h-5 mr-2"
+                          fill="currentColor"
+                          viewBox="0 0 20 20"
+                        >
+                          <path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z" />
+                          <path
+                            fillRule="evenodd"
+                            d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 4a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h3a1 1 0 100-2h-3zm-3 4a1 1 0 100 2h.01a1 1 0 100-2H7zm3 0a1 1 0 100 2h3a1 1 0 100-2h-3z"
+                            clipRule="evenodd"
+                          />
+                        </svg>
+                        {careerRecommendation || "No recommendation available"}
+                      </p>
+                    )}
+                    <button
+                      onClick={fetchCareerRecommendation}
+                      className="w-full bg-[#8b65ab] hover:bg-[#7a5a9a] text-white py-1 rounded-md mt-2 font-medium transition-colors duration-200"
+                      disabled={isRecommendationLoading}
+                    >
+                      Refresh Recommendation
+                    </button>
+                  </div>
+                  <button
+                    onClick={() => setIsEditing(true)}
+                    className="w-full bg-[#4bc0c0] hover:bg-[#3aa0a0] text-white py-2 rounded-md font-medium transition-colors duration-200"
+                  >
+                    Edit Profile
+                  </button>
+                </>
+              )}
+              <button
+                onClick={handleLogout}
+                className="w-full bg-[#ff6384] hover:bg-[#e55374] text-white py-2 rounded-md font-medium transition-colors duration-200"
+              >
+                Logout
+              </button>
+            </div>
+          ) : (
+            <p className="text-gray-300">No user data available.</p>
+          )}
+        </div>
+      )}
+    </>
+  );
 };
 
 export default Navbar;
