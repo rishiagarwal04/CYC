@@ -56,16 +56,16 @@ def preprocess_input(data: CareerInput) -> pd.DataFrame:
     interest_dict = {
         "Tech": 2,
         "Cooking": 10,
-        # "Social Work": 0,
-        # "Biology": 1,
-        # "Technology": 2,
-        # "Business": 3,
-        # "Arts": 4,
-        # "Programming": 5,
-        # "Mathematics": 6,
-        # "Sports": 7,
-        # "Science": 8,
-        # "Design": 9,
+        "Social Work": 0,
+        "Biology": 1,
+        "Technology": 2,
+        "Business": 3,
+        "Arts": 4,
+        "Programming": 5,
+        "Mathematics": 6,
+        "Sports": 7,
+        "Science": 8,
+        "Design": 9,
     }
 
     qualification_dict = {
