@@ -19,7 +19,7 @@ const skillSchema = new mongoose.Schema(
       minlength: 8,
     },
     current_skillset: {
-      type: String,
+      type: [String],
       required: true,
       minlength: 3,
       maxlength: 100,

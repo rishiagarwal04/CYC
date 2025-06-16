@@ -1,4 +1,16 @@
-import React from 'react';
+import React, { useState, useRef } from 'react';
+
+const suggestions = {
+  "advancedCulinarySpecialization": "Specialize in a culinary field and become an expert in your passion!",
+  "competitionsAndShows": "Showcase your skills in prestigious culinary competitions and TV shows!",
+  "renownedTrainingPrograms": "Get hands-on experience with top-tier culinary training programs!",
+  "certificationsAndCourses": "Boost your skills with certifications and short-term culinary courses!",
+  "entrepreneurship": "Start your own culinary venture and make your mark in the industry!",
+  "researchAndTech": "Innovate in food tech and sustainability through research and development!",
+  "teachingAndAcademia": "Inspire the next generation by teaching culinary arts!",
+  "networkingAndExposure": "Build connections and gain exposure at culinary expos and events!",
+  default: "Hover over a section to get insights about culinary career opportunities!"
+};
 
 const C1112 = () => {
   const data = {
@@ -122,49 +134,144 @@ const C1112 = () => {
     },
   };
 
+  const [isInstructorOpen, setIsInstructorOpen] = useState(false);
+  const [hoveredSection, setHoveredSection] = useState(null);
+  const instructorRef = useRef(null);
+
+  // Handle click outside to close speech bubble
+  const handleClickOutside = (event) => {
+    if (instructorRef.current && !instructorRef.current.contains(event.target)) {
+      setIsInstructorOpen(false);
+    }
+  };
+
+  // Add click-outside listener
+  React.useEffect(() => {
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
+  // Toggle instructor manually
+  const toggleInstructor = () => {
+    setIsInstructorOpen(!isInstructorOpen);
+  };
+
+  // Handle section hover
+  const handleSectionHover = (sectionKey) => {
+    setHoveredSection(sectionKey);
+    setIsInstructorOpen(true);
+  };
+
+  // Handle section leave
+  const handleSectionLeave = () => {
+    setHoveredSection(null);
+    setIsInstructorOpen(false);
+  };
+
+  // Get current suggestion
+  const currentSuggestion = hoveredSection ? suggestions[hoveredSection] : suggestions.default;
+
   return (
-<div className="font-sans w-full flex justify-center">
-  <div className="bg-purple-100 p-8 rounded-lg w-full m-5 mt-8 pl-[5%]">
+    <div className="min-h-screen bg-purple-200 py-12 px-6 relative font-sans">
+      <div className="max-w-5xl mx-auto space-y-8">
+        {Object.keys(data).map((sectionKey) => {
+          const section = data[sectionKey];
+          return (
+            <div
+              key={sectionKey}
+              className="bg-purple-100 rounded-lg p-6 shadow-md hover:bg-purple-200 hover:shadow-xl transition-all duration-200"
+              onMouseEnter={() => handleSectionHover(sectionKey)}
+              onMouseLeave={handleSectionLeave}
+              aria-label={`Learn more about ${section.title}`}
+            >
+              {/* Section Title */}
+              <div className="bg-gradient-to-r from-[#8b65ab] to-[#7a5a9a] py-6 text-center w-full rounded-lg mb-4">
+                <h2 className="text-3xl font-semibold text-white">{section.title}</h2>
+              </div>
 
-    {Object.keys(data).map((sectionKey) => {
-      const section = data[sectionKey];
-      return (
-        <div key={sectionKey} className="mb-8">
-          
-          {/* Section Title */}
-          <div className="bg-purple-800 text-white py-6 text-center w-full rounded-lg mb-4">
-            <h2 className="text-3xl font-bold">{section.title}</h2>
-          </div>
-          
-          {/* Section Description */}
-          <p className="text-gray-600 mt-4">{section.description}</p>
+              {/* Section Description */}
+              <p className="text-gray-700 text-lg mt-4">{section.description}</p>
 
-          {/* India & Abroad Lists */}
-          <div className="mt-6">
-            <div className="mb-4">
-              <h3 className="text-xl font-semibold text-purple-800">India:</h3>
-              <ul className="space-y-2 pl-5 text-gray-600">
-                {section.india.map((item, index) => (
-                  <li key={index}>{item}</li>
-                ))}
-              </ul>
+              {/* India & Abroad Lists */}
+              <div className="mt-6 space-y-4">
+                <div>
+                  <h3 className="text-xl font-semibold text-purple-800">India:</h3>
+                  <ul className="list-disc pl-5 text-gray-700 text-lg space-y-2">
+                    {section.india.map((item, index) => (
+                      <li key={index} className="hover:text-[#ffce56] transition-colors duration-200">
+                        {item}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+
+                <div>
+                  <h3 className="text-xl font-semibold text-purple-800">Abroad:</h3>
+                  <ul className="list-disc pl-5 text-gray-700 text-lg space-y-2">
+                    {section.abroad.map((item, index) => (
+                      <li key={index} className="hover:text-[#ffce56] transition-colors duration-200">
+                        {item}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
             </div>
-            
-            <div>
-              <h3 className="text-xl font-semibold text-purple-800">Abroad:</h3>
-              <ul className="space-y-2 pl-5 text-gray-600">
-                {section.abroad.map((item, index) => (
-                  <li key={index}>{item}</li>
-                ))}
-              </ul>
-            </div>
-          </div>
-        </div>
-      );
-    })}
-  </div>
-</div>
+          );
+        })}
+      </div>
 
+      {/* Human-Like Instructor Button */}
+      <div className="fixed bottom-6 right-6 z-50" ref={instructorRef}>
+        <button
+          onClick={toggleInstructor}
+          className="flex items-center bg-[#C4B5FD] text-[#4C1D95] rounded-full px-4 py-2 shadow-lg hover:bg-[#A78BFA] hover:shadow-xl transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-[#4C1D95]"
+          aria-label="Toggle culinary insights from Coach Clara"
+          tabIndex={0}
+        >
+          <div className="w-10 h-10 bg-[#EDE9FE] rounded-full flex items-center justify-center mr-2">
+            <span className="text-[#4C1D95] text-lg font-semibold">C</span>
+          </div>
+          <span className="text-sm font-semibold">Coach Clara</span>
+        </button>
+        {isInstructorOpen && (
+          <div className="absolute bottom-14 right-0 w-72 bg-white p-6 rounded-xl shadow-xl border border-[#C4B5FD] animate-fade-in">
+            <div className="flex items-center mb-4">
+              <div className="w-8 h-8 bg-[#EDE9FE] rounded-full flex items-center justify-center mr-3">
+                <span className="text-[#4C1D95] text-base font-semibold">C</span>
+              </div>
+              <h3 className="text-[#4C1D95] text-lg font-semibold">Coach Clara</h3>
+            </div>
+            <p className="text-gray-600 text-sm">{currentSuggestion}</p>
+            <button
+              onClick={() => setIsInstructorOpen(false)}
+              className="absolute top-2 right-2 text-gray-500 hover:text-[#4C1D95] focus:outline-none"
+              aria-label="Close instructor insights"
+            >
+              ✕
+            </button>
+          </div>
+        )}
+      </div>
+
+      <style>
+        {`
+          @keyframes fade-in {
+            from {
+              opacity: 0;
+              transform: translateY(10px);
+            }
+            to {
+              opacity: 1;
+              transform: translateY(0);
+            }
+          }
+          .animate-fade-in {
+            animation: fade-in 0.3s ease-out forwards;
+          }
+        `}
+      </style>
+    </div>
   );
 };
 

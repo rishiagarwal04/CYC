@@ -3,6 +3,7 @@ import React, { useEffect, useRef, useState } from "react";
 const News = () => {
   const containerRef = useRef(null);
   const [repeatedNewsItems, setRepeatedNewsItems] = useState([]);
+  const [scrollDirection, setScrollDirection] = useState("down");
 
   const newsItems = [
     {
@@ -45,7 +46,7 @@ const News = () => {
   useEffect(() => {
     const scrollContainer = containerRef.current;
 
-    let scrollStep = 1;
+    let scrollStep = 1; // Positive for down, negative for up
     let scrollInterval = null;
 
     const fillContainerWithNews = () => {
@@ -53,7 +54,7 @@ const News = () => {
 
       const containerHeight = scrollContainer.clientHeight;
       const itemHeight = scrollContainer.scrollHeight / newsItems.length;
-      const numItemsToFill = Math.ceil(containerHeight / itemHeight) + 5; // +5 ensures looping buffer
+      const numItemsToFill = Math.ceil(containerHeight / itemHeight) + 5; // Buffer for smooth looping
 
       const repeatedNews = [];
       for (let i = 0; i < numItemsToFill; i++) {
@@ -67,14 +68,27 @@ const News = () => {
       scrollInterval = setInterval(() => {
         if (!scrollContainer) return;
 
-        // If we reach the bottom, reset to top
-        if (
-          scrollContainer.scrollTop + scrollContainer.clientHeight >=
-          scrollContainer.scrollHeight
-        ) {
-          scrollContainer.scrollTop = 0;
+        if (scrollDirection === "down") {
+          // Scroll down
+          if (
+            scrollContainer.scrollTop + scrollContainer.clientHeight >=
+            scrollContainer.scrollHeight
+          ) {
+            // Reached bottom, switch to scrolling up
+            setScrollDirection("up");
+            scrollStep = -1;
+          } else {
+            scrollContainer.scrollTop += scrollStep;
+          }
         } else {
-          scrollContainer.scrollTop += scrollStep;
+          // Scroll up
+          if (scrollContainer.scrollTop <= 0) {
+            // Reached top, switch to scrolling down
+            setScrollDirection("down");
+            scrollStep = 1;
+          } else {
+            scrollContainer.scrollTop += scrollStep;
+          }
         }
       }, 20); // Adjust speed here
     };
@@ -88,7 +102,7 @@ const News = () => {
       clearInterval(scrollInterval);
       clearTimeout(timeout);
     };
-  }, []);
+  }, [scrollDirection]);
 
   return (
     <>
@@ -97,7 +111,7 @@ const News = () => {
       </div>
       <div
         ref={containerRef}
-        className="flex flex-col overflow-hidden h-[1900px] space-y-2"
+        className="flex flex-col overflow-hidden h-[2060px] space-y-2"
         style={{
           scrollBehavior: "smooth",
           padding: "1px",

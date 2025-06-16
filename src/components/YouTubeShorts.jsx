@@ -127,7 +127,7 @@ const YouTubeShorts = () => {
   }, [isPopupOpen, isPlaying, isMuted]);
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-purple-50 to-indigo-50 py-8 px-4">
+    <div className="min-h-screen bg-gradient-to-b from-purple-50 to-indigo-50 py-8 px-4" >
       <div className="max-w-6xl mx-auto">
         <div className="text-center mb-10">
           <h1 className="text-4xl font-bold text-purple-800 mb-2">

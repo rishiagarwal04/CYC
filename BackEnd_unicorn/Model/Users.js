@@ -34,6 +34,8 @@ const userSchema = new mongoose.Schema(
         "Undergraduate",
         "Postgraduate",
         "Doctorate",
+        "10th Grade",
+        "9th Grade",
       ],
       // required: true,
     },

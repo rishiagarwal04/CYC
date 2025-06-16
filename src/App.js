@@ -311,9 +311,21 @@ import EngineeringData from "./Data/Engineer/MarketTrends";
 import CareerOptions from "./Data/Engineer/Specializations";
 import PersonalizeForm from "./components/PersonalizeForm";
 import Highscool from "./pages/highscool";
+import Undergraduate from "./stream/engineering/undergraduate";
+import CoreEngineeringSubjects from "./stream/engineering/coreEngineeringSubject";
+import C910 from "./Data/Cooking/C910";
+import ScienceOlympiad from "./Data/Engineer/ninthAnd10/Main";
+import Postgraduate from "./stream/engineering/postgraduate";
+import Explore from "./pages/explore";
+import Bachelors from "./Data/Cooking/Bachelors";
+import Carnival from "./Data/Cooking/Carnival";
+import C1112 from "./Data/Cooking/eleven12";
+import PostgraduateCooking from "./Data/Cooking/PostgraduateCooking";
 // import C910 from './Data/Cooking/C910';
 // import C1112 from './Data/Cooking/eleven12';
 function App() {
+  const Career = localStorage.getItem("Career");
+
   const router = createBrowserRouter([
     // {
     //   path: "/landing",
@@ -326,7 +338,7 @@ function App() {
     //   ),
     // },
     {
-      path: "/explore",
+      path: "/home",
       element: (
         <div>
           {" "}
@@ -343,6 +355,14 @@ function App() {
         </div>
       ),
       errorElement: <div>Page not found!</div>,
+    },
+    {
+      path: "/explore",
+      element: (
+        <div>
+          <Navbar /> <Explore />
+        </div>
+      ),
     },
     {
       path: "/personalize/:id",
@@ -383,7 +403,7 @@ function App() {
       errorElement: <div>Page not found!</div>,
     },
     {
-      path: "/explore/roadmap/endeng",
+      path: "/home/roadmap/endeng",
       element: (
         <div>
           <Navbar /> <Endeng />
@@ -392,7 +412,7 @@ function App() {
       errorElement: <div>Page not found!</div>,
     },
     {
-      path: "explore/engineer/nine10",
+      path: "home/engineer/nine10",
       element: (
         <div>
           <Navbar /> <E910 />
@@ -401,7 +421,7 @@ function App() {
       errorElement: <div>Page not found!</div>,
     },
     {
-      path: "explore/engineer/highschool",
+      path: "home/engineer/highschool",
       element: (
         <div>
           <Navbar /> <Highscool />
@@ -410,16 +430,40 @@ function App() {
       errorElement: <div>Page not found!</div>,
     },
     {
-      path: "/explore/engineer/eleven12",
+      path: "/home/engineer/postgraduate",
       element: (
         <div>
-          <Navbar /> <E1112 />
+          {Career === "engineering" ? (
+            <>
+              <Navbar /> <Postgraduate />
+            </>
+          ) : (
+            <>
+              <Navbar /> <PostgraduateCooking />
+            </>
+          )}
+        </div>
+      ),
+    },
+    {
+      path: "/home/engineer/eleven12",
+      element: (
+        <div>
+          {Career === "engineering" ? (
+            <>
+              <Navbar /> <E1112 />
+            </>
+          ) : (
+            <>
+              <Navbar /> <C1112 />
+            </>
+          )}
         </div>
       ),
       errorElement: <div>Page not found!</div>,
     },
     {
-      path: "/explore/engineer/college",
+      path: "/home/engineer/college",
       element: (
         <div>
           <Navbar /> <CollegeTable />
@@ -428,7 +472,56 @@ function App() {
       errorElement: <div>Page not found!</div>,
     },
     {
-      path: "/explore/engineer/markettrends",
+      path: "/home/engineer/undergraduate",
+      element: (
+        <div>
+          {Career === "engineering" ? (
+            <>
+              <Navbar /> <Undergraduate />
+            </>
+          ) : (
+            <>
+              <Navbar /> <Bachelors />
+            </>
+          )}
+        </div>
+      ),
+    },
+    {
+      path: "/home/engineer/ten",
+      element: (
+        <div>
+          {Career === "engineering" ? (
+            <>
+              <Navbar /> <ScienceOlympiad />
+            </>
+          ) : (
+            <>
+              <Navbar /> <C910 />
+            </>
+          )}
+        </div>
+      ),
+    },
+    {
+      path: "/home/engineer/core",
+      element: (
+        <div>
+          {Career === "engineering" ? (
+            <>
+              <Navbar /> <CoreEngineeringSubjects />{" "}
+            </>
+          ) : (
+            <>
+              <Navbar />
+              <Carnival />
+            </>
+          )}
+        </div>
+      ),
+    },
+    {
+      path: "/home/engineer/markettrends",
       element: (
         <div>
           <Navbar /> <EngineeringData />
@@ -437,7 +530,7 @@ function App() {
       errorElement: <div>Page not found!</div>,
     },
     {
-      path: "/explore/engineer/specializations",
+      path: "/home/engineer/specializations",
       element: (
         <div>
           <Navbar /> <CareerOptions />

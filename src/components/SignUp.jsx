@@ -46,7 +46,7 @@ const SignUp = () => {
         localStorage.setItem("userId", id);
       }
       alert("Signup successful!");
-      navigate("/sigin");
+      navigate("/");
     } catch (error) {
       // Handle errors
       console.error(

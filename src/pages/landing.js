@@ -1,16 +1,16 @@
-import React from 'react';
-import News from '../components/news';
-import Quora_ka_bhai from '../components/Quora_ka_bhai.jsx';
-import YouTubeShorts from '../components/YouTubeShorts.jsx';
-import Testimonials from '../components/Testimonials.jsx';
-import Navbar from '../components/navbar.js';
-import Footer from '../components/footer.js';
-import MarketTrends from '../stream/engineering/marketTrendsEng';
-import RoadmapEng from '../stream/engineering/roadmapEng';
-import EngineeringData from '../Data/Engineer/MarketTrends.jsx';
+import React from "react";
+import News from "../components/news";
+import Quora_ka_bhai from "../components/Quora_ka_bhai.jsx";
+import YouTubeShorts from "../components/YouTubeShorts.jsx";
+import Testimonials from "../components/Testimonials.jsx";
+import Navbar from "../components/navbar.js";
+import Footer from "../components/footer.js";
+import MarketTrends from "../stream/engineering/marketTrendsEng";
+import RoadmapEng from "../stream/engineering/roadmapEng";
+import EngineeringData from "../Data/Engineer/MarketTrends.jsx";
 
 const Landing = () => {
-  let id=localStorage.getItem("userId")
+  let id = localStorage.getItem("userId");
 
   // if(!id){
   // window.location.href='/signup'
@@ -31,7 +31,10 @@ const Landing = () => {
         <div>
           <div className="flex flex-row align-items  space-x-3 px-4 py-4">
             {/* News Section */}
-            <div className=" w-1/4">
+            <div
+              className=" w-1/4"
+
+            >
               <News />
             </div>
 
@@ -44,21 +47,28 @@ const Landing = () => {
 
               {/* Market Trends Section */}
               {/* <div className="bg-[#f4ecfa] h-[500px]"> */}
-                <EngineeringData />
+              <EngineeringData />
               {/* </div> */}
             </div>
           </div>
           <div>
             {/* Q&A Section */}
             <div className="bg-[#f4ecfa] h-[600px] m-4">
-              <div className="h-[95%] flex flex-col justify-center items-center overflow-hidden">
+              <div
+                className="h-[80%] flex flex-col justify-center items-center"
+                style={{
+                  marginTop: "10%",
+                  borderRadius: "10px",
+                  height: "100%",
+                }}
+              >
                 <Quora_ka_bhai />
               </div>
             </div>
 
             {/* Short Videos Section */}
             <div>
-              <div className="h-[95%] p-4">
+              <div className="h-[95%] pt-40">
                 <YouTubeShorts />
               </div>
             </div>
@@ -79,7 +89,7 @@ const Landing = () => {
 
 const styles = {
   fontcursiv: {
-    fontFamily: 'cursive',
+    fontFamily: "cursive",
   },
 };
 

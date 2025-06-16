@@ -4,23 +4,62 @@ import axios from "axios";
 
 const PersonalizeForm = () => {
   const navigate = useNavigate();
-  const [showInterests, setShowInterests] = useState(false);
   const [selectedInterests, setSelectedInterests] = useState([]);
-  const [coursesDone, setCoursesDone] = useState("");
-  const [skillset, setSkillset] = useState("");
+  const [selectedCourses, setSelectedCourses] = useState([]);
+  const [selectedSkills, setSelectedSkills] = useState([]);
   const [futureGoal, setFutureGoal] = useState("");
   const [error, setError] = useState("");
+  const [openDropdown, setOpenDropdown] = useState(null); // 'interests', 'courses', or 'skills'
+
+  // Predefined lists
   const interestsList = [
-    { label: "Tech", value: "Tech" },
-    { label: "Cooking", value: "Cooking" },
+    "Technology",
+    "Cooking",
+    "Photography",
+    "Music",
+    "Sports",
+    "Art",
+    "Reading",
+    "Travel",
+    "Gaming",
+    "Fitness",
   ];
 
-  const toggleInterest = (interest) => {
-    setSelectedInterests((prev) =>
-      prev.includes(interest)
-        ? prev.filter((item) => item !== interest)
-        : [...prev, interest]
-    );
+  const coursesList = [
+    "Python Programming",
+    "Web Development",
+    "Data Science",
+    "Machine Learning",
+    "Graphic Design",
+    "Digital Marketing",
+    "Financial Accounting",
+    "Business Management",
+    "Creative Writing",
+    "Mobile App Development",
+  ];
+
+  const skillsList = [
+    "Programming",
+    "Graphic Design",
+    "Public Speaking",
+    "Project Management",
+    "Data Analysis",
+    "Content Writing",
+    "UI/UX Design",
+    "Digital Marketing",
+    "Photography",
+    "Video Editing",
+  ];
+
+  const toggleDropdown = (dropdownName) => {
+    setOpenDropdown(openDropdown === dropdownName ? null : dropdownName);
+  };
+
+  const handleSelection = (item, selectedItems, setSelectedItems) => {
+    const newSelection = selectedItems.includes(item)
+      ? selectedItems.filter((i) => i !== item)
+      : [...selectedItems, item];
+    setSelectedItems(newSelection);
   };
 
   const handleSubmit = async (e) => {
@@ -32,22 +71,19 @@ const PersonalizeForm = () => {
       setError("Please select at least one interest.");
       return;
     }
-    if (!coursesDone.trim()) {
-      setError("Please enter at least one course completed.");
+    if (selectedCourses.length === 0) {
+      setError("Please select at least one completed course.");
       return;
     }
-    if (!skillset.trim()) {
-      setError("Please describe your current skillset.");
+    if (selectedSkills.length === 0) {
+      setError("Please select at least one skill.");
       return;
     }
 
     const formData = {
       interest: selectedInterests,
-      courses_done: coursesDone
-        .split(",")
-        .map((item) => item.trim())
-        .filter((item) => item),
-      current_skillset: skillset,
+      courses_done: selectedCourses,
+      current_skillset: selectedSkills,
       your_future_goal: futureGoal || "",
     };
 
@@ -56,42 +92,88 @@ const PersonalizeForm = () => {
       if (!id) {
         throw new Error("User ID not found in localStorage");
       }
-      console.log("Submitting personalization data:", formData);
       const response = await axios.post(
         `http://localhost:5000/signup/personalize/${id}`,
         formData
       );
-      console.log("Personalization response:", response.data);
       alert("Personalization data saved successfully!");
-      navigate("/");
-      localStorage.setItem(
-        "interest",
-        JSON.stringify(response.data.data.interest)
-      );
-      localStorage.setItem(
-        "courses_done",
-        JSON.stringify(response.data.data.courses_done)
-      );
-      localStorage.setItem(
-        "current_skillset",
-        response.data.data.current_skillset
-      );
-      localStorage.setItem(
-        "your_future_goal",
-        response.data.data.your_future_goal || ""
-      );
+
+      // Save to localStorage
+      // localStorage.setItem(
+      //   "interest",
+      //   JSON.stringify(response.data.data.interest)
+      // );
+      // localStorage.setItem(
+      //   "courses_done",
+      //   JSON.stringify(response.data.data.courses_done)
+      // );
+      // localStorage.setItem(
+      //   "current_skillset",
+      //   JSON.stringify(response.data.data.current_skillset)
+      // );
+      // localStorage.setItem(
+      //   "your_future_goal",
+      //   response.data.data.your_future_goal || ""
+      // );
+
       navigate("/");
     } catch (error) {
-      console.error(
-        "Error submitting form data:",
-        error.response?.data || error.message
-      );
+      console.error("Error submitting form data:", error);
       setError(
         error.response?.data?.error ||
           "Failed to save your data. Please try again."
       );
     }
   };
+
+  // Helper component for dropdown
+  const DropdownSelector = ({
+    label,
+    items,
+    selectedItems,
+    setSelectedItems,
+    dropdownName,
+  }) => (
+    <div className="mb-4 relative">
+      <label className="text-gray-300 block mb-2">{label}</label>
+      <div
+        className="w-full px-4 py-2 bg-gray-700 text-gray-300 rounded-md border border-gray-600 cursor-pointer"
+        onClick={() => toggleDropdown(dropdownName)}
+      >
+        {selectedItems.length > 0
+          ? selectedItems.join(", ")
+          : `Select ${dropdownName}`}
+      </div>
+      {openDropdown === dropdownName && (
+        <div
+          className="absolute z-10 w-full mt-1 bg-gray-800 border border-gray-600 rounded-md max-h-60 overflow-y-auto shadow-lg"
+          onBlur={() => setOpenDropdown(null)}
+          tabIndex={0}
+        >
+          {items.map((item) => (
+            <div
+              key={item}
+              className={`px-4 py-2 hover:bg-gray-700 cursor-pointer flex items-center ${
+                selectedItems.includes(item) ? "bg-blue-900 bg-opacity-50" : ""
+              }`}
+              onClick={() => {
+                handleSelection(item, selectedItems, setSelectedItems);
+              }}
+              style={{ color: "white" }}
+            >
+              <input
+                type="checkbox"
+                checked={selectedItems.includes(item)}
+                readOnly
+                className="mr-2 cursor-pointer"
+              />
+              {item}
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
 
   return (
     <div
@@ -102,7 +184,7 @@ const PersonalizeForm = () => {
       }}
     >
       <Link
-        to="/explore"
+        to="/home"
         className="text-black text-sm absolute right-10 z-10 top-8 bg-white px-5 py-2 rounded-[10px]"
       >
         Skip
@@ -113,76 +195,32 @@ const PersonalizeForm = () => {
         </h2>
         {error && <p className="text-red-400 mb-4 text-center">{error}</p>}
         <form onSubmit={handleSubmit}>
-          {/* Interests */}
-          <div className="mb-4">
-            <label className="text-gray-300 block mb-2">
-              What are your interests?
-            </label>
-            <div className="relative">
-              <button
-                type="button"
-                onClick={() => setShowInterests(!showInterests)}
-                className="w-full px-4 py-2 bg-gray-700 text-gray-300 rounded-md border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
-              >
-                {selectedInterests.length > 0
-                  ? selectedInterests.join(", ")
-                  : "Select your interests"}
-              </button>
-              {showInterests && (
-                <div className="z-10 bg-gray-800 border border-gray-600 rounded-md mt-2 p-4 max-h-40 overflow-y-auto">
-                  {interestsList.map((interest) => (
-                    <div
-                      key={interest.value}
-                      className="flex items-center mb-2"
-                    >
-                      <input
-                        type="checkbox"
-                        id={interest.value}
-                        value={interest.value}
-                        checked={selectedInterests.includes(interest.value)}
-                        onChange={() => toggleInterest(interest.value)}
-                        className="mr-2 cursor-pointer"
-                      />
-                      <label
-                        htmlFor={interest.value}
-                        className="text-gray-300 cursor-pointer"
-                      >
-                        {interest.label}
-                      </label>
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
-          </div>
+          {/* Interests Dropdown */}
+          <DropdownSelector
+            label="What are your interests? (Select at least one)"
+            items={interestsList}
+            selectedItems={selectedInterests}
+            setSelectedItems={setSelectedInterests}
+            dropdownName="interests"
+          />
 
-          {/* Courses Done */}
-          <div className="mb-4">
-            <label className="text-gray-300 block mb-2">
-              Courses you have completed
-            </label>
-            <textarea
-              rows="3"
-              value={coursesDone}
-              onChange={(e) => setCoursesDone(e.target.value)}
-              className="w-full px-4 py-2 bg-gray-700 text-gray-300 rounded-md border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
-              placeholder="List courses (comma-separated, e.g., Python 101, Data Science)..."
-            ></textarea>
-          </div>
+          {/* Courses Dropdown */}
+          <DropdownSelector
+            label="Courses you have completed (Select at least one)"
+            items={coursesList}
+            selectedItems={selectedCourses}
+            setSelectedItems={setSelectedCourses}
+            dropdownName="courses"
+          />
 
-          {/* Current Skillset */}
-          <div className="mb-4">
-            <label className="text-gray-300 block mb-2">
-              Your current skillset
-            </label>
-            <textarea
-              rows="3"
-              value={skillset}
-              onChange={(e) => setSkillset(e.target.value)}
-              className="w-full px-4 py-2 bg-gray-700 text-gray-300 rounded-md border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
-              placeholder="Describe your current skills..."
-            ></textarea>
-          </div>
+          {/* Skills Dropdown */}
+          <DropdownSelector
+            label="Your current skillset (Select at least one)"
+            items={skillsList}
+            selectedItems={selectedSkills}
+            setSelectedItems={setSelectedSkills}
+            dropdownName="skills"
+          />
 
           {/* Future Goal (Optional) */}
           <div className="mb-4">

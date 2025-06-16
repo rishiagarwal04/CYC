@@ -166,6 +166,59 @@ router.get("/skills/:id", async (req, res) => {
   }
 });
 
+router.put("/skills/:id", async (req, res) => {
+  try {
+    const userId = req.params.id;
+    const { interest, courses_done, current_skillset, your_future_goal } =
+      req.body;
+
+    // Validate the input
+    if (
+      !Array.isArray(interest) ||
+      !Array.isArray(courses_done) ||
+      !Array.isArray(current_skillset)
+    ) {
+      return res.status(400).json({ error: "Invalid input data" });
+    }
+
+    // Find the user by ID and update the data
+    console.log("User ID:", userId);
+    console.log("Interest:", interest);
+    console.log("Courses Done:", courses_done);
+    console.log("Current Skillset:", current_skillset);
+    console.log("Your Future Goal:", your_future_goal);
+
+    const updatedSkill = await Skill.findOneAndUpdate(
+      { user_id: userId },
+      {
+        $set: {
+          interest: interest,
+          courses_done: courses_done,
+          current_skillset: current_skillset,
+          your_future_goal: your_future_goal || "Other",
+        },
+      },
+      { new: true, runValidators: true }
+    );
+
+    if (!updatedSkill) {
+      return res
+        .status(404)
+        .json({ message: "Skills not found for this user" });
+    }
+
+    res.status(200).json({
+      message: "Personalization data updated successfully",
+      skill: updatedSkill,
+    });
+  } catch (error) {
+    console.error("Error updating personalization data:", error);
+    res.status(500).json({
+      error: "An error occurred while updating the data",
+    });
+  }
+});
+
 router.put("/user/:id", async (req, res) => {
   try {
     const userId = req.params.id;

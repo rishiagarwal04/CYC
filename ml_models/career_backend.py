@@ -17,160 +17,150 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# In-memory user storage
-users_db = {}
-
-# Pydantic model
+# Pydantic model (updated to better reflect frontend)
 class CareerInput(BaseModel):
     interest: List[str]
     courses_done: List[str]
-    qualification: str
-    current_skillset: str
+    current_skillset: List[str]
     your_future_goal: str
+    qualification: Optional[str] = None  # Now optional to match your frontend
     username: Optional[str] = None
     gender: Optional[str] = None
     contact: Optional[str] = None
 
-# Load ML model
+# Load ML model (unchanged)
 try:
     with open("decision_tree_model.pkl", "rb") as f:
         model = pickle.load(f)
-        print("Object type:", type(model))
         print("Model loaded successfully")
 except Exception as e:
     raise Exception(f"Failed to load model: {str(e)}")
 
-# Preprocess input
+# Updated preprocessing to handle multiple selections
 def preprocess_input(data: CareerInput) -> pd.DataFrame:
     print("Input data:", data.dict())
-    # Handle lists by selecting first item or default
-    input_dict = {
-        "Interest": data.interest[0] if data.interest else "Unknown",
-        "Qualifications": data.qualification,
-        "Courses done": data.courses_done[0] if data.courses_done else "Unknown",
-        "Skills": data.current_skillset,
-        "Want to pursue": data.your_future_goal,
-    }
-
-    # Define mappings
+    
+    # Define mappings (expanded to match your frontend options)
     interest_dict = {
-        "Tech": 2,
-        "Cooking": 10,
-        "Social Work": 0,
-        "Biology": 1,
         "Technology": 2,
-        "Business": 3,
-        "Arts": 4,
-        "Programming": 5,
-        "Mathematics": 6,
+        "Cooking": 10,
+        "Photography": 4,
+        "Music": 4,
         "Sports": 7,
-        "Science": 8,
-        "Design": 9,
+        "Art": 4,
+        "Reading": 4,
+        "Travel": 0,  # Mapped to Social Work
+        "Gaming": 2,  # Mapped to Tech
+        "Fitness": 7, # Mapped to Sports
+        # Add more mappings as needed
     }
 
     qualification_dict = {
-        "9th Grade": 0,
-        "10th Grade": 1,
         "High School": 2,
         "Bachelor's": 3,
         "Master's": 4,
-        "Postgraduate": 0,
         "PhD": 6,
+        # Add more as needed
     }
 
-    courses_done_dict = {
-        "Python": 5,
-        "Civics Workshop": 0,
-        "Biology Basics": 1,
-        "Intro to Coding": 2,
-        "Commerce Introduction": 3,
-        "Drawing Course": 4,
-        "Python Basics": 5,
-        "Vedic Maths": 6,
-        "Sports Training": 7,
-        "Basic Science": 8,
-        "Graphic Design Intro": 9,
+    courses_dict = {
+        "Python Programming": 5,
+        "Web Development": 2,
+        "Data Science": 5,
+        "Machine Learning": 5,
+        "Graphic Design": 4,
+        "Digital Marketing": 3,
+        "Financial Accounting": 3,
+        "Business Management": 3,
+        "Creative Writing": 4,
+        "Mobile App Development": 2,
+        # Add more as needed
     }
 
-    skillset_dict = {
-        "Coding": 5,
-        "Empathy": 0,
-        "Observation": 1,
-        "Problem Solving": 2,
-        "Communication": 3,
-        "Creativity": 4,
-        "Logical Reasoning": 6,
-        "Teamwork": 7,
-        "Analytical Thinking": 8,
-        "Aesthetic Sense": 9,
+    skills_dict = {
+        "Programming": 5,
+        "Graphic Design": 4,
+        "Public Speaking": 3,
+        "Project Management": 3,
+        "Data Analysis": 5,
+        "Content Writing": 4,
+        "UI/UX Design": 9,
+        "Digital Marketing": 3,
+        "Photography": 4,
+        "Video Editing": 4,
+        # Add more as needed
     }
 
     future_goal_dict = {
-        "Something": 10,
-        "NGO Work": 0,
-        "Medical": 1,
-        "Computer Science": 2,
+        "Social Worker": 0,
+        "Medical Field": 1,
+        "Tech Industry": 2,
         "Entrepreneurship": 3,
-        "Fine Arts": 4,
-        "Software Developer": 5,
-        "Statistics": 6,
-        "Athletics": 7,
+        "Arts": 4,
+        "Data Science": 5,
+        "Academia": 6,
+        "Sports": 7,
         "Engineering": 8,
-        "UX Designer": 9,
+        "Design": 9,
+        "Other": 10,
+        # Add more as needed
     }
 
+    # Process multiple selections by taking the first one or most relevant
+    # You might want to implement more sophisticated logic here
+    primary_interest = data.interest[0] if data.interest else "Technology"
+    primary_course = data.courses_done[0] if data.courses_done else "Python Programming"
+    primary_skill = data.current_skillset[0] if data.current_skillset else "Programming"
+    
     # Create DataFrame
     df = pd.DataFrame([{
-        "Interest": interest_dict.get(input_dict["Interest"], 10),
-        "Qualifications": qualification_dict.get(input_dict["Qualifications"], 0),
-        "Courses done": courses_done_dict.get(input_dict["Courses done"], 10),
-        "Skills": skillset_dict.get(input_dict["Skills"], 10),
-        "Want to pursue": future_goal_dict.get(input_dict["Want to pursue"], 10),
+        "Interest": interest_dict.get(primary_interest, 2),  # Default to Tech
+        "Qualifications": qualification_dict.get(data.qualification, 2),  # Default to High School
+        "Courses done": courses_dict.get(primary_course, 5),  # Default to Python
+        "Skills": skills_dict.get(primary_skill, 5),  # Default to Programming
+        "Want to pursue": future_goal_dict.get(data.your_future_goal, 10),  # Default to Explore
     }])
 
     print("Processed DataFrame:", df)
     return df
 
-# Career recommendation endpoint
+# Updated career recommendation endpoint
 @app.post("/recommend/career")
 async def recommend_career(input_data: CareerInput):
-    print("Received data:", input_data)
-    # if not model:
-    #     raise HTTPException(status_code=500, detail="ML model not loaded")
-
     try:
-        # Preprocess
+        # Validate at least one item in each array
+        if not input_data.interest:
+            raise HTTPException(status_code=400, detail="Please select at least one interest")
+        if not input_data.courses_done:
+            raise HTTPException(status_code=400, detail="Please select at least one course")
+        if not input_data.current_skillset:
+            raise HTTPException(status_code=400, detail="Please select at least one skill")
+
         processed_data = preprocess_input(input_data)
-        print("Processed data:", processed_data)
-
-        # Predict
         prediction = model.predict(processed_data)
-        print("Raw prediction:", prediction)
-
-        # Handle prediction output
-        # if isinstance(prediction, np.ndarray):
-        #     if prediction.ndim > 1:
-        #         prediction = prediction[0]  # Take first row if multi-dimensional
-        #     prediction = prediction.item()  # Convert to scalar
-        print("Processed prediction:", prediction[0])
-
-        # Map prediction
+        print("prediction is " , prediction)
         career_mapping = {
             0: "Social Worker",
-            1: "Biologist",
-            2: "Software Engineer",
-            3: "Business Analyst",
-            4: "Artist",
-            5: "Data Scientist",
-            6: "Mathematician",
-            7: "Athlete",
-            8: "Scientist",
+            1: "Biologist/Medical Professional",
+            2: "Software Engineer/Tech Specialist",
+            3: "Business Analyst/Entrepreneur",
+            4: "Artist/Creative Professional",
+            5: "Data Scientist/Analyst",
+            6: "Academic/Researcher",
+            7: "Athlete/Sports Professional",
+            8: "Engineer/Scientist",
             9: "Designer",
-            10: "Explore Tech Roles",
+            10: "Explore Various Roles",
         }
 
-        # career_path = career_mapping.get(int(prediction[0]), "Unknown Career")
-        return {"career_path": prediction[0]}
+        return {
+            "career_path": prediction[0],
+            "details": {
+                "matched_interest": input_data.interest[0],
+                "matched_course": input_data.courses_done[0],
+                "matched_skill": input_data.current_skillset[0]
+            }
+        }
     except Exception as e:
         print("Prediction error:", str(e))
         raise HTTPException(status_code=500, detail=f"Prediction error: {str(e)}")
