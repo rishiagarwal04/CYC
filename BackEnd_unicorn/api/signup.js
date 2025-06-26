@@ -1,8 +1,8 @@
 const express = require("express");
-const User = require("./Model/Users.js");
+const User = require("./Users.js");
 const bcrypt = require("bcryptjs");
 const router = express.Router();
-const Skill = require("./Model/Forms.js");
+const Skill = require("./Forms.js");
 // Signup Endpoint
 router.post("/", async (req, res) => {
   try {

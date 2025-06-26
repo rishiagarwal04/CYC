@@ -4,9 +4,9 @@ const mongoose = require("mongoose");
 const cors = require("cors");
 const dotenv = require("dotenv");
 dotenv.config();
-const questionRouter = require("./QandA.js");
-const shortsRouter = require("./shorts.js");
-const userRouter = require("./signup.js");
+const questionRouter = require("./api/QandA.js");
+const shortsRouter = require("./api/shorts.js");
+const userRouter = require("./api/signup.js");
 
 const app = express();
 app.use(
