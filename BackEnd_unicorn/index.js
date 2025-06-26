@@ -16,7 +16,7 @@ app.use(
   })
 );
 app.use(express.json());
-
+console.log("Environment Variables:", process.env.MONGO_URL, process.env.PORT);
 mongoose
   .connect(`${process.env.MONGO_URL}`)
   .then(() => console.log("Connected to MongoDB"))
