@@ -66,10 +66,13 @@ export default function CareerMilestones() {
   const [isInstructorOpen, setIsInstructorOpen] = useState(false);
   const [hoveredBlock, setHoveredBlock] = useState(null);
   const [selectedMilestone, setSelectedMilestone] = useState(null);
+  const [showPopup, setShowPopup] = useState(false);
+  const [chosenCareer, setChosenCareer] = useState(null);
   const instructorRef = useRef(null);
+  const popupRef = useRef(null);
 
   // Handle click outside to close speech bubble
-  const handleClickOutside = (event) => {
+  const handleClickOutsideInstructor = (event) => {
     if (
       instructorRef.current &&
       !instructorRef.current.contains(event.target)
@@ -78,10 +81,21 @@ export default function CareerMilestones() {
     }
   };
 
-  // Add click-outside listener
+  // Handle click outside to close popup
+  const handleClickOutsidePopup = (event) => {
+    if (popupRef.current && !popupRef.current.contains(event.target)) {
+      setShowPopup(false);
+    }
+  };
+
+  // Add click-outside listeners
   React.useEffect(() => {
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
+    document.addEventListener("mousedown", handleClickOutsideInstructor);
+    document.addEventListener("mousedown", handleClickOutsidePopup);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutsideInstructor);
+      document.removeEventListener("mousedown", handleClickOutsidePopup);
+    };
   }, []);
 
   // Toggle instructor manually
@@ -104,13 +118,17 @@ export default function CareerMilestones() {
   // Handle block click
   const handleBlockClick = (blockTitle) => {
     setSelectedMilestone(blockTitle);
+    setChosenCareer(blockTitle);
+    setShowPopup(true);
     // Set localStorage Career based on the clicked block
     if (blockTitle === "Engineering") {
       localStorage.setItem("Career", "engineering");
     } else if (blockTitle === "Cooking") {
       localStorage.setItem("Career", "cooking");
     }
-    window.location.reload();
+    setInterval(() => {
+      window.location.reload();
+    }, 4000);
   };
 
   // Get current suggestion
@@ -181,12 +199,34 @@ export default function CareerMilestones() {
         </button>
       </div>
 
-      {/* Detailed Content Area */}
-      {/* {selectedMilestone && (
-        <div className="mt-8 max-w-6xl mx-auto bg-purple-100 rounded-lg shadow-md p-8">
-          {milestoneDetails[selectedMilestone]}
+      {/* Popup Message */}
+      {showPopup && chosenCareer && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div
+            ref={popupRef}
+            className="bg-purple-100 rounded-xl p-6 shadow-xl border border-[#C4B5FD] w-96 animate-fade-in"
+            tabIndex={0}
+            aria-label={`Career selection confirmation: ${chosenCareer}`}
+          >
+            <div className="flex items-center mb-4">
+              <h3 className="text-purple-800 text-lg font-semibold">
+                Career Selected!
+              </h3>
+            </div>
+            <p className="text-gray-700 text-lg mb-4">
+              You have chosen {chosenCareer} as your career path! . <br />
+              Reloading...
+            </p>
+            <button
+              onClick={() => setShowPopup(false)}
+              className="absolute top-2 right-2 text-gray-500 hover:text-[#4C1D95] focus:outline-none focus:ring-2 focus:ring-[#4C1D95]"
+              aria-label="Close career selection popup"
+            >
+              ✕
+            </button>
+          </div>
         </div>
-      )} */}
+      )}
 
       {/* Human-Like Instructor Button */}
       <div className="fixed bottom-6 right-6 z-50" ref={instructorRef}>
@@ -224,6 +264,7 @@ export default function CareerMilestones() {
           </div>
         )}
       </div>
+
       <style>
         {`
           @keyframes fade-in {
