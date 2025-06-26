@@ -95,8 +95,8 @@ const Navbar = () => {
         setIsLoading(true);
         try {
           const [response1, response2] = await Promise.all([
-            axios.get(`http://localhost:5000/signup/user/${userId}`),
-            axios.get(`http://localhost:5000/signup/skills/${userId}`),
+            axios.get(`https://cycbackend.vercel.app/signup/user/${userId}`),
+            axios.get(`https://cycbackend.vercel.app/signup/skills/${userId}`),
           ]);
           setUserData(response1.data.user);
           setSkillData({
@@ -212,11 +212,11 @@ const Navbar = () => {
       console.log("Skill data being sent:", editSkillData);
       console.log("User data being sent:", editData);
       const response = await axios.put(
-        `http://localhost:5000/signup/user/${userId}`,
+        `https://cycbackend.vercel.app/signup/user/${userId}`,
         editData
       );
       const response_2 = await axios.put(
-        `http://localhost:5000/signup/skills/${userId}`,
+        `https://cycbackend.vercel.app/signup/skills/${userId}`,
         editSkillData
       );
       setUserData(response.data.user);
@@ -315,14 +315,12 @@ const Navbar = () => {
                 onClick={() => {
                   handleMultiSelectChange(name, option);
                 }}
-                
               >
                 <input
                   type="checkbox"
                   checked={selectedItems.includes(option)}
                   readOnly
                   className="mr-2 cursor-pointer"
-                  
                 />
                 <span className="text-white">{option}</span>
               </div>

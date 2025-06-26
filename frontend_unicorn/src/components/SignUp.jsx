@@ -29,7 +29,7 @@ const SignUp = () => {
     // };
 
     try {
-      const response = await axios.post("http://localhost:5000/signup", {
+      const response = await axios.post("https://cycbackend.vercel.app/signup", {
         username: formData.username,
         password: formData.password,
         birthday: formData.birthday,

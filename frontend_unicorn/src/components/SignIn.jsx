@@ -22,11 +22,11 @@ const Signin = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError(""); // Reset error state
-  
+
     try {
       console.log("Form data before submission:", formData); // Debugging log
       const response = await axios.post(
-        `http://localhost:5000/signup/signin`,
+        `https://cycbackend.vercel.app/signup/signin`,
         formData
       ); // Changed to POST
       console.log("Response data:", response.data);

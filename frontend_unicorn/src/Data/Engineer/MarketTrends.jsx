@@ -321,7 +321,7 @@ const EngineeringData = () => {
       if (userId) {
         try {
           const response = await axios.get(
-            `http://localhost:5000/signup/user/${userId}`
+            `https://cycbackend.vercel.app/signup/user/${userId}`
           );
           setQualification(response.data.user?.qualification || "Bachelor's");
         } catch (error) {
@@ -363,9 +363,12 @@ const EngineeringData = () => {
   };
 
   return (
-    <div className="bg-purple-100 shadow-lg rounded-lg p-8 pt-10 mgt-10" style={{
-      marginTop: "10%",
-    }}>
+    <div
+      className="bg-purple-100 shadow-lg rounded-lg p-8 pt-10 mgt-10"
+      style={{
+        marginTop: "10%",
+      }}
+    >
       <h1 className="text-3xl font-bold text-purple-700 mb-9 text-center">
         Engineering Domain Statistics
         {qualification ? ` for ${qualification}` : ""}
