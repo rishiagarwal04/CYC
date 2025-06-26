@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const Question = require("./QandA_db.js");
+const Question = require("./Model/QandA.js");
 
 // Post a question
 router.post("/", async (req, res) => {
