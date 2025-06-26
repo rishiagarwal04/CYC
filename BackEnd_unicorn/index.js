@@ -4,9 +4,9 @@ const mongoose = require("mongoose");
 const cors = require("cors");
 const dotenv = require("dotenv");
 dotenv.config();
-const questionRouter = require("./routes/QandA.js");
-const shortsRouter = require("./routes/shorts.js");
-const userRouter = require("./routes/signup.js");
+const questionRouter = require("./QandA.js");
+const shortsRouter = require("./shorts.js");
+const userRouter = require("./signup.js");
 
 const app = express();
 app.use(
@@ -18,7 +18,10 @@ app.use(
 app.use(express.json());
 console.log("Environment Variables:", process.env.MONGO_URL, process.env.PORT);
 mongoose
-  .connect(`${process.env.MONGO_URL}`,{useNewUrlParser: true,useUnifiedTopology: true})
+  .connect(`${process.env.MONGO_URL}`, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  })
   .then(() => console.log("Connected to MongoDB"))
   .catch((err) => console.error("MongoDB connection error:", err));
 
