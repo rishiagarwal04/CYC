@@ -1,12 +1,12 @@
 import React from "react";
-import News from "../components/news";
+import News from "../components/news.js";
 import Quora_ka_bhai from "../components/Quora_ka_bhai.jsx";
 import YouTubeShorts from "../components/YouTubeShorts.jsx";
 import Testimonials from "../components/Testimonials.jsx";
 import Navbar from "../components/navbar.js";
 import Footer from "../components/footer.js";
-import MarketTrends from "../stream/engineering/marketTrendsEng";
-import RoadmapEng from "../stream/engineering/roadmapEng";
+import MarketTrends from "../stream/engineering/marketTrendsEng.js";
+import RoadmapEng from "../stream/engineering/roadmapEng.js";
 import EngineeringData from "../Data/Engineer/MarketTrends.jsx";
 
 const Landing = () => {
@@ -31,10 +31,7 @@ const Landing = () => {
         <div>
           <div className="flex flex-row align-items  space-x-3 px-4 py-4">
             {/* News Section */}
-            <div
-              className=" w-1/4"
-
-            >
+            <div className=" w-1/4">
               <News />
             </div>
 

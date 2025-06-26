@@ -1,29 +1,38 @@
-import React, { useState, useRef } from 'react';
-import Data from './Data';
-import Skills from './Skills.jsx';
+import React, { useState, useRef } from "react";
+import Data from "./Data.jsx";
+import Skills from "./Skills.jsx";
 
 const data = {
   Olympiads: [
-    'Mathematics',
-    'Chemistry',
-    'Physics',
-    'Science Olympiads',
-    'Technology and Computing',
-    'General Knowledge and Miscellaneous',
+    "Mathematics",
+    "Chemistry",
+    "Physics",
+    "Science Olympiads",
+    "Technology and Computing",
+    "General Knowledge and Miscellaneous",
   ],
   Skills: {},
 };
 
 const suggestions = {
-  Olympiads: "Explore Olympiads to challenge yourself and stand out in academics!",
-  Mathematics: "Excel in Math Olympiads to sharpen your problem-solving skills!",
-  Chemistry: "Master Chemistry Olympiads to prepare for careers in research or medicine!",
-  Physics: "Tackle Physics Olympiads to build a strong foundation for engineering!",
-  "Science Olympiads": "Participate in Science Olympiads to showcase your scientific curiosity!",
-  "Technology and Computing": "Compete in Tech Olympiads to boost your coding and innovation skills!",
-  "General Knowledge and Miscellaneous": "Engage in GK Olympiads to enhance your awareness and versatility!",
-  Skills: "Develop key skills to complement your Olympiad achievements and career goals!",
-  default: "Hover over a category or subcategory to get personalized advice for your journey!"
+  Olympiads:
+    "Explore Olympiads to challenge yourself and stand out in academics!",
+  Mathematics:
+    "Excel in Math Olympiads to sharpen your problem-solving skills!",
+  Chemistry:
+    "Master Chemistry Olympiads to prepare for careers in research or medicine!",
+  Physics:
+    "Tackle Physics Olympiads to build a strong foundation for engineering!",
+  "Science Olympiads":
+    "Participate in Science Olympiads to showcase your scientific curiosity!",
+  "Technology and Computing":
+    "Compete in Tech Olympiads to boost your coding and innovation skills!",
+  "General Knowledge and Miscellaneous":
+    "Engage in GK Olympiads to enhance your awareness and versatility!",
+  Skills:
+    "Develop key skills to complement your Olympiad achievements and career goals!",
+  default:
+    "Hover over a category or subcategory to get personalized advice for your journey!",
 };
 
 const E910 = () => {
@@ -36,15 +45,18 @@ const E910 = () => {
 
   // Handle click outside to close speech bubble
   const handleClickOutside = (event) => {
-    if (instructorRef.current && !instructorRef.current.contains(event.target)) {
+    if (
+      instructorRef.current &&
+      !instructorRef.current.contains(event.target)
+    ) {
       setIsInstructorOpen(false);
     }
   };
 
   // Add click-outside listener
   React.useEffect(() => {
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
   // Toggle instructor manually
@@ -84,7 +96,9 @@ const E910 = () => {
   };
 
   // Get current suggestion
-  const currentSuggestion = hoveredItem ? suggestions[hoveredItem] : suggestions.default;
+  const currentSuggestion = hoveredItem
+    ? suggestions[hoveredItem]
+    : suggestions.default;
 
   return (
     <div className="flex h-screen relative">
@@ -110,8 +124,8 @@ const E910 = () => {
                         key={index}
                         className={`cursor-pointer p-2 rounded ${
                           selectedSubcategory === item
-                            ? 'bg-white text-purple-800'
-                            : 'hover:bg-purple-600 hover:text-purple-100'
+                            ? "bg-white text-purple-800"
+                            : "hover:bg-purple-600 hover:text-purple-100"
                         } transition-colors duration-200`}
                         onClick={() => handleSubcategoryClick(item)}
                         onMouseEnter={() => handleSubcategoryHover(item)}
@@ -125,8 +139,8 @@ const E910 = () => {
                         key={subcategory}
                         className={`cursor-pointer p-2 rounded ${
                           selectedSubcategory === subcategory
-                            ? 'bg-white text-purple-800'
-                            : 'hover:bg-purple-600 hover:text-purple-100'
+                            ? "bg-white text-purple-800"
+                            : "hover:bg-purple-600 hover:text-purple-100"
                         } transition-colors duration-200`}
                         onClick={() => handleSubcategoryClick(subcategory)}
                         onMouseEnter={() => handleSubcategoryHover(subcategory)}
@@ -163,9 +177,13 @@ const E910 = () => {
           <div className="absolute bottom-14 right-0 w-72 bg-white p-6 rounded-xl shadow-xl border border-[#C4B5FD] animate-fade-in">
             <div className="flex items-center mb-4">
               <div className="w-8 h-8 bg-[#EDE9FE] rounded-full flex items-center justify-center mr-3">
-                <span className="text-[#4C1D95] text-base font-semibold">C</span>
+                <span className="text-[#4C1D95] text-base font-semibold">
+                  C
+                </span>
               </div>
-              <h3 className="text-[#4C1D95] text-lg font-semibold">Coach Clara</h3>
+              <h3 className="text-[#4C1D95] text-lg font-semibold">
+                Coach Clara
+              </h3>
             </div>
             <p className="text-gray-600 text-sm">{currentSuggestion}</p>
             <button
