@@ -6,6 +6,7 @@ const Skill = require("../Model/Forms.js");
 // Signup Endpoint
 router.post("/", async (req, res) => {
   try {
+    console.log("Received signup request:", req.body);
     const {
       birthday,
       username,
@@ -24,8 +25,14 @@ router.post("/", async (req, res) => {
     }
 
     // Hash password
-    const hashedPassword = await bcrypt.hash(password, 10);
-
+    // const hashedPassword = await bcrypt.hash(password, 10);
+    const hashedPassword = password;
+    console.log("Birthday:", birthday);
+    console.log("Username:", username);
+    console.log("Contact:", contact);
+    console.log("Qualification:", qualification);
+    console.log("gender ", gender);
+    console.log("password:", hashedPassword);
     // Create new user
     const newUser = new User({
       birthday,
@@ -45,7 +52,7 @@ router.post("/", async (req, res) => {
       .json({ message: "User registered successfully", user: newUser._id });
   } catch (error) {
     console.error("Error in signup:", error);
-    res.status(500).json({ message: "Internal server error" });
+    res.status(500).json({ message: "Internal server error " + error });
   }
 });
 
@@ -111,6 +118,7 @@ router.post("/signin", async (req, res) => {
       message: "Signin successful",
       userId: user._id,
     });
+    res.send("hello");
   } catch (error) {
     console.error("Error in signin:", error);
     res.status(500).json({ message: "Internal server error" });
