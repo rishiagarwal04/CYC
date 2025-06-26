@@ -93,7 +93,7 @@ const PersonalizeForm = () => {
         throw new Error("User ID not found in localStorage");
       }
       const response = await axios.post(
-        `https://cycbackend.vercel.app/signup/personalize/${id}`,
+        `https://cyc-backend-3.onrender.com/signup/personalize/${id}`,
         formData
       );
       alert("Personalization data saved successfully!");

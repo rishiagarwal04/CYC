@@ -321,7 +321,7 @@ const EngineeringData = () => {
       if (userId) {
         try {
           const response = await axios.get(
-            `https://cycbackend.vercel.app/signup/user/${userId}`
+            `https://cyc-backend-3.onrender.com/signup/user/${userId}`
           );
           setQualification(response.data.user?.qualification || "Bachelor's");
         } catch (error) {

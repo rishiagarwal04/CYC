@@ -12,7 +12,7 @@ const QandA = () => {
 
   useEffect(() => {
     axios
-      .get("https://cycbackend.vercel.app/questions")
+      .get("https://cyc-backend-3.onrender.com/questions")
       .then((response) => {
         setQuestions(response.data);
       })
@@ -29,7 +29,7 @@ const QandA = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     axios
-      .post("https://cycbackend.vercel.app/questions", newQuestion)
+      .post("https://cyc-backend-3.onrender.com/questions", newQuestion)
       .then((response) => {
         setQuestions([...questions, response.data]);
         setNewQuestion({ title: "", author: "" });

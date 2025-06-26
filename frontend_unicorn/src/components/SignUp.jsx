@@ -29,15 +29,19 @@ const SignUp = () => {
     // };
 
     try {
-      const response = await axios.post("https://cycbackend.vercel.app/signup", {
-        username: formData.username,
-        password: formData.password,
-        birthday: formData.birthday,
-        gender: formData.gender,
-        contact: formData.contact,
-        qualification: formData.qualification,
-      });
-
+      console.log("Form Data:", formData);
+      const response = await axios.post(
+        "https://cyc-backend-3.onrender.com/signup/",
+        {
+          username: formData.username,
+          password: formData.password,
+          birthday: formData.birthday,
+          gender: formData.gender,
+          contact: formData.contact,
+          qualification: formData.qualification,
+        }
+      );
+      console.log("Response:", response);
       // Handle success
       console.log("User registered:", response.data);
       // alert('Signup successful!');
@@ -53,7 +57,7 @@ const SignUp = () => {
         "Error during signup:",
         error.response?.data || error.message
       );
-      alert("Signup failed. Please try again.");
+      alert("Signup failed. Please try again." + error);
     }
   };
 

@@ -95,8 +95,12 @@ const Navbar = () => {
         setIsLoading(true);
         try {
           const [response1, response2] = await Promise.all([
-            axios.get(`https://cycbackend.vercel.app/signup/user/${userId}`),
-            axios.get(`https://cycbackend.vercel.app/signup/skills/${userId}`),
+            axios.get(
+              `https://cyc-backend-3.onrender.com/signup/user/${userId}`
+            ),
+            axios.get(
+              `https://cyc-backend-3.onrender.com/signup/skills/${userId}`
+            ),
           ]);
           setUserData(response1.data.user);
           setSkillData({
@@ -212,11 +216,11 @@ const Navbar = () => {
       console.log("Skill data being sent:", editSkillData);
       console.log("User data being sent:", editData);
       const response = await axios.put(
-        `https://cycbackend.vercel.app/signup/user/${userId}`,
+        `https://cyc-backend-3.onrender.com/signup/user/${userId}`,
         editData
       );
       const response_2 = await axios.put(
-        `https://cycbackend.vercel.app/signup/skills/${userId}`,
+        `https://cyc-backend-3.onrender.com/signup/skills/${userId}`,
         editSkillData
       );
       setUserData(response.data.user);

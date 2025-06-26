@@ -12,7 +12,7 @@ const QuestionDetail = () => {
   useEffect(() => {
     // Fetch the question and answers based on the question ID
     axios
-      .get(`https://cycbackend.vercel.app/questions/${id}`)
+      .get(`https://cyc-backend-3.onrender.com/questions/${id}`)
       .then((response) => {
         setQuestion(response.data);
       })
@@ -21,7 +21,7 @@ const QuestionDetail = () => {
       });
 
     axios
-      .get(`https://cycbackend.vercel.app/questions/${id}/answers`)
+      .get(`https://cyc-backend-3.onrender.com/questions/${id}/answers`)
       .then((response) => {
         setAnswers(response.data);
       })
@@ -35,7 +35,7 @@ const QuestionDetail = () => {
     const currentUser = JSON.parse(localStorage.getItem("currentUser"));
     const authorName = currentUser?.name;
     axios
-      .post(`https://cycbackend.vercel.app/questions/${id}/answer`, {
+      .post(`https://cyc-backend-3.onrender.com/questions/${id}/answer`, {
         answer: newAnswer,
         author: `${authorName}`, // Replace with logged-in user's name
       })
