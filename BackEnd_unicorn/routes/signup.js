@@ -1,6 +1,6 @@
 const express = require("express");
 const User = require("../Model/Users.js");
-const bcrypt = require("bcrypt");
+const bcrypt = require("bcryptjs");
 const router = express.Router();
 const Skill = require("../Model/Forms.js");
 // Signup Endpoint
