@@ -164,3 +164,7 @@ async def recommend_career(input_data: CareerInput):
     except Exception as e:
         print("Prediction error:", str(e))
         raise HTTPException(status_code=500, detail=f"Prediction error: {str(e)}")
+import uvicorn 
+if __name__ == "__main__":
+    
+    uvicorn.run(app, host="0.0.0.0", port=8000)
