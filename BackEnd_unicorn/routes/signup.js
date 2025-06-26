@@ -25,8 +25,8 @@ router.post("/", async (req, res) => {
     }
 
     // Hash password
-    // const hashedPassword = await bcrypt.hash(password, 10);
-    const hashedPassword = password;
+    const hashedPassword = await bcrypt.hash(password, 10);
+    // const hashedPassword = password;
     console.log("Birthday:", birthday);
     console.log("Username:", username);
     console.log("Contact:", contact);
@@ -118,7 +118,6 @@ router.post("/signin", async (req, res) => {
       message: "Signin successful",
       userId: user._id,
     });
-    res.send("hello");
   } catch (error) {
     console.error("Error in signin:", error);
     res.status(500).json({ message: "Internal server error" });
