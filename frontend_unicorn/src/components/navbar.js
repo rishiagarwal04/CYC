@@ -140,7 +140,7 @@ const Navbar = () => {
       setIsRecommendationLoading(true);
       try {
         const response = await axios.post(
-          `https://vineet6378.pythonanywhere.com/recommend/career`,
+          `https://cyc-ml-server-7.onrender.com/recommend/career`,
           skillData,
           { headers: { "Content-Type": "application/json" } }
         );
