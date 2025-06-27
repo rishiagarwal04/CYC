@@ -124,6 +124,9 @@ def preprocess_input(data: CareerInput) -> pd.DataFrame:
     print("Processed DataFrame:", df)
     return df
 
+@app.get("/")
+def home():
+    return {"message": "Use the /recommend/career endpoint to get career recommendations."}
 # Updated career recommendation endpoint
 @app.post("/recommend/career")
 async def recommend_career(input_data: CareerInput):
@@ -154,6 +157,7 @@ async def recommend_career(input_data: CareerInput):
         }
 
         return {
+            "<h>hello</h>": "Welcome to Career Recommendation",
             "career_path": prediction[0],
             "details": {
                 "matched_interest": input_data.interest[0],
