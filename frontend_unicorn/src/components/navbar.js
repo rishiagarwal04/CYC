@@ -729,7 +729,10 @@ const Navbar = () => {
               </button>
             </div>
           ) : (
-            <p className="text-gray-300">No user data available.</p>
+            <p className="text-gray-300">
+              No user data available or please submit the personalize Form first
+              .
+            </p>
           )}
         </div>
       )}

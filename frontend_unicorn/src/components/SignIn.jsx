@@ -33,7 +33,7 @@ const Signin = () => {
 
       if (response.status === 200) {
         localStorage.setItem("userId", response.data.userId); // Store userId
-        navigate(`/personalize/${localStorage.getItem("userId")}`); // Redirect to dashboard
+        navigate("/home"); // Redirect to dashboard
       } else {
         setError(response.data.message || "Invalid username or password");
       }

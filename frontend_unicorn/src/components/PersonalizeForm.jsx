@@ -183,12 +183,12 @@ const PersonalizeForm = () => {
         backgroundBlendMode: "overlay",
       }}
     >
-      <Link
+      {/* <Link
         to="/home"
         className="text-black text-sm absolute right-10 z-10 top-8 bg-white px-5 py-2 rounded-[10px]"
       >
         Skip
-      </Link>
+      </Link> */}
       <div className="w-1/3 bg-gray-900 p-8 rounded-lg shadow-lg">
         <h2 className="text-white text-2xl font-bold mb-6 text-center">
           Let's Get to Know YOU

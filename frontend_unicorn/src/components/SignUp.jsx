@@ -55,7 +55,7 @@ const SignUp = () => {
         return;
       }
       alert("Signup successful!");
-      navigate("/");
+      navigate(`/personalize/${localStorage.getItem("userId")}`);
     } catch (error) {
       // Handle errors
       console.error(
