@@ -49,6 +49,11 @@ const SignUp = () => {
         const id = response.data.user;
         localStorage.setItem("userId", id);
       }
+
+      if (response.status === 400) {
+        alert("Username already exists. Please choose a different username.");
+        return;
+      }
       alert("Signup successful!");
       navigate("/");
     } catch (error) {
